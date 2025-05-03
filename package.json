@@ -1,0 +1,17 @@
+{
+  "name": "anabelle-bot",
+  "version": "1.0",
+  "description": "An automoderation app for the r/TeensofMaharashtra Discord Server.",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm i && node ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord-logs": "^2.0.0",
+    "discord.js": "^14.19.3",
+    "dotenv": "^16.5.0"
+  }
+}
