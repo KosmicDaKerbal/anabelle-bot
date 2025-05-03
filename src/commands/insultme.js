@@ -1,7 +1,6 @@
 const {EmbedBuilder} = require("discord.js");
-const process = require("process");
 const https = require ("https");
-const insult = new EmbedBuilder().setTitle("An Insult for You").setColor(0xf18701);
+const insult = new EmbedBuilder().setTitle("An Insult for You").setColor(0x8c3f7a);
 module.exports = {
   me: async function (embed) {
     await embed.deferReply();

@@ -3,7 +3,7 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentTyp
 const dayjs = require('dayjs');
 module.exports = {
     execute: async function (embed) {
-        const restart = new EmbedBuilder().setTitle("Confirm Bot Restart").setColor(0xf18701).setAuthor({ name: `${process.env.BOT_NAME} Administration`, iconURL: process.env.PROCESSING }).setFooter({ text: `v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
+        const restart = new EmbedBuilder().setTitle("Confirm Bot Restart").setColor(0x8c3f7a).setAuthor({ name: `${process.env.BOT_NAME} Administration`, iconURL: process.env.PROCESSING }).setFooter({ text: `v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
         const restartConfirm = new ButtonBuilder().setCustomId("reconfirm").setLabel("Restart").setStyle(ButtonStyle.Danger).setDisabled(false);
         const component = new ActionRowBuilder().addComponents(restartConfirm);
         const filter = (i) => i.user.id === embed.user.id;
