@@ -79,8 +79,19 @@ client.on("guildMemberAdd", async member => {
               break;
         }
     } else {
-      index.setTitle("User not verified").setColor(0xff0000).setDescription(`Whoa there, we don't know whether you're a human or not.\nVerify yourself in the <#${process.env.VERIFICATION_CHANNEL}> channel`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
-       await mainInteraction.reply({ embeds: [index], ephemeral: true });
+       switch (mainInteraction.commandName) {
+        case "captcha":
+          console.log (mainInteraction.user);
+        /*
+          captcha.present(member);
+          captcha.on("success", data => {
+          console.log(`${data.member.user.username} has solved a CAPTCHA.`);
+          data.member.roles.remove("1368095911305281536");*/
+          break;
+          default:
+            index.setTitle("User not verified").setColor(0xff0000).setDescription(`Whoa there, we don't know whether you're a human or not.\nVerify yourself in the <#${process.env.VERIFICATION_CHANNEL}> channel`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
+            await mainInteraction.reply({ embeds: [index], ephemeral: true });
+       }
     }
     }
     if (!rbt){
