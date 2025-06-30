@@ -17,18 +17,18 @@ const client = new Client({
   const index = new EmbedBuilder();
   var rbt;
   const captcha = new Captcha(client, {
-    roleID: "1368095832313692170", //optional
-    channelID: "1389110949436330014", //optional
-    sendToTextChannel: false, //optional, defaults to false
-    addRoleOnSuccess: true, //optional, defaults to true. whether you want the bot to add the role to the user if the captcha is solved
-    kickOnFailure: false, //optional, defaults to true. whether you want the bot to kick the user if the captcha is failed
-    caseSensitive: true, //optional, defaults to true. whether you want the captcha responses to be case-sensitive
-    attempts: 3, //optional, defaults to 1. number of attempts before captcha is considered to be failed
-    timeout: 30000, //optional, defaults to 60000. time the user has to solve the captcha on each attempt in milliseconds
-    showAttemptCount: true, //optional, defaults to true. whether to show the number of attempts left in embed footer
-    customPromptEmbed: new EmbedBuilder(), //customise the embed that will be sent to the user when the captcha is requested
-    customSuccessEmbed: new EmbedBuilder(), //customise the embed that will be sent to the user when the captcha is solved
-    customFailureEmbed: new EmbedBuilder(), //customise the embed that will be sent to the user when they fail to solve the captcha
+    roleID: "1368095832313692170",
+    channelID: "1389110949436330014",
+    sendToTextChannel: false,
+    addRoleOnSuccess: true,
+    kickOnFailure: true,
+    caseSensitive: true,
+    attempts: 3,
+    timeout: 60000,
+    showAttemptCount: true,
+    customPromptEmbed: new EmbedBuilder().setTitle("w̶̼̃ḣ̷̬a̶̞̽t̸͉̓ ̷͈͌i̴̘͝s̵̪̈ ̷̡̿ẗ̴̺ẖ̵̇î̷̞s̷̼̑?̷̼͛").setFooter({ text: `Teens of Maharashtra v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
+    customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage("https://i.postimg.cc/MHCZZcS4/Annabelle-Creation-Trailer2.jpg").setFooter({ text: `Teens of Maharashtra v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
+    customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage("https://i.postimg.cc/1X57gM9V/thumb-1920-686638.jpg").setFooter({ text: `Teens of Maharashtra v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
 });
 client.on("guildMemberAdd", async member => {
     var role= member.guild.roles.cache.find(role => role.id === "1368095911305281536");
