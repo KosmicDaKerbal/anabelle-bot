@@ -7,6 +7,10 @@ const commands = [
         description: 'Complete Commands List for the Bot.',
     },
     {
+        name: 'captcha',
+        description: 'Restart verification for Server.',
+    },
+    {
         name: 'slowmode',
         description: "Set a Slowmode: Admin Command",
         options: [
