@@ -34,10 +34,10 @@ client.on("guildMemberAdd", async member => {
     var role= member.guild.roles.cache.find(role => role.id === "1368095911305281536");
     member.roles.add(role);
     captcha.present(member);
-});
-captcha.on("success", data => {
+    captcha.on("success", data => {
     console.log(`A Member has Solved a CAPTCHA!`);
     console.log(data);
+});
 });
   client.on("interactionCreate", async (mainInteraction) => {
     if (!mainInteraction.isChatInputCommand()) return;
