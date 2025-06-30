@@ -90,7 +90,12 @@ client.on("guildMemberAdd", async member => {
           captcha.present(mainInteraction);
           captcha.on("success", data => {
           console.log(`${data.member.user.username} has solved a CAPTCHA.`);
-          data.member.roles.remove("1368095911305281536");
+          try {
+            data.member.roles.remove("1368095911305281536");
+          } catch (e){
+            console.log(e);
+          }
+          
           });
           break;
           default:
