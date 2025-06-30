@@ -5,6 +5,7 @@ const help = require('./commands/help');
 const insult = require('./commands/insultme');
 const restart = require('./commands/restart');
 const slowmode = require("./commands/slowmode");
+const verify = require("./commands/captcha");
 const client = new Client({
     intents: [
       IntentsBitField.Flags.Guilds,
@@ -85,18 +86,7 @@ client.on("guildMemberAdd", async member => {
     } else {
        switch (mainInteraction.commandName) {
         case "captcha":
-          index.setTitle("Captcha Verification Process Started. Check your DM's.");
-          await mainInteraction.reply({ embeds: [index], ephemeral: true });
-          captcha.present(mainInteraction);
-          captcha.on("success", data => {
-          console.log(`${data.member.user.username} has solved a CAPTCHA.`);
-          try {
-            data.member.roles.remove("1368095911305281536");
-          } catch (e){
-            console.log(e);
-          }
-          
-          });
+          verify.start(mainInteraction, captcha);
           break;
           default:
             index.setTitle("User not verified").setColor(0xff0000).setDescription(`Whoa there, we don't know whether you're a human or not.\nVerify yourself in the <#${process.env.VERIFICATION_CHANNEL}> channel`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
