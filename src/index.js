@@ -48,6 +48,10 @@ client.on("guildMemberAdd", async member => {
     } else {
       if (mainInteraction.member.roles.cache.some(role => role.name === process.env.VERIFIED_ROLE)) {
         switch (mainInteraction.commandName) {
+          case "captcha":
+          index.setTitle("User is already verified.").setColor(0x00ff00);
+          await mainInteraction.reply({ embeds: [index], ephemeral: true });
+          break;
           case "help":
             help.send(mainInteraction);
             break;
@@ -81,7 +85,7 @@ client.on("guildMemberAdd", async member => {
     } else {
        switch (mainInteraction.commandName) {
         case "captcha":
-          console.log (mainInteraction.user);
+          console.log (mainInteraction);
           index.setTitle("Captcha Verification Process Started. Check your DM's.");
           await mainInteraction.reply({ embeds: [index], ephemeral: true });
         /*
