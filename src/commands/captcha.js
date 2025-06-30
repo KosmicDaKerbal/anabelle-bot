@@ -18,7 +18,7 @@ module.exports = {
             });
         const index = new EmbedBuilder().setTitle("Captcha Verification Process Started. Check your DM's.");
         await embed.reply({ embeds: [index], ephemeral: true });
-        captcha.present(embed);
+        await captcha.present(embed.member);
         captcha.on("success", data => {
         console.log(`${data.member.user.username} has solved a CAPTCHA.`);
         try {
