@@ -4,7 +4,7 @@
   "description": "An automoderation app for the r/TeensofMaharashtra Discord Server.",
   "main": "src/index.js",
   "scripts": {
-    "start": "npm i && node ."
+    "start": "git pull https://github.com/KosmicDaKerbal/anabelle-bot.git && npm i && node ."
   },
   "keywords": [],
   "author": "",
