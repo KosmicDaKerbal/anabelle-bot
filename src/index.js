@@ -85,7 +85,6 @@ client.on("guildMemberAdd", async member => {
     } else {
        switch (mainInteraction.commandName) {
         case "captcha":
-          console.log ();
           index.setTitle("Captcha Verification Process Started. Check your DM's.");
           await mainInteraction.reply({ embeds: [index], ephemeral: true });
           captcha.present(mainInteraction);
