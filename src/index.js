@@ -5,7 +5,6 @@ const help = require('./commands/help');
 const insult = require('./commands/insultme');
 const restart = require('./commands/restart');
 const slowmode = require("./commands/slowmode");
-const captcha = require("./commands/verify");
 const client = new Client({
     intents: [
       IntentsBitField.Flags.Guilds,
