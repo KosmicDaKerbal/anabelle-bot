@@ -1,19 +1,39 @@
-require('dotenv').config({ path: require('find-config')('.env') });
+require('dotenv').config();
 const { Client, IntentsBitField, EmbedBuilder, ActivityType } = require("discord.js");
+const { Captcha } = require("discord.js-captcha");
 const help = require('./commands/help');
 const insult = require('./commands/insultme');
 const restart = require('./commands/restart');
 const slowmode = require("./commands/slowmode");
+const captcha = require("./commands/verify");
 const client = new Client({
     intents: [
       IntentsBitField.Flags.Guilds,
       IntentsBitField.Flags.GuildMembers,
       IntentsBitField.Flags.GuildMessages,
       IntentsBitField.Flags.MessageContent,
+      IntentsBitField.Flags.DirectMessages,
     ],
   });
   const index = new EmbedBuilder();
   var rbt;
+  const captcha = new Captcha(client, {
+    roleID: "1368095832313692170", //optional
+    channelID: "1389110949436330014", //optional
+    sendToTextChannel: false, //optional, defaults to false
+    addRoleOnSuccess: true, //optional, defaults to true. whether you want the bot to add the role to the user if the captcha is solved
+    kickOnFailure: false, //optional, defaults to true. whether you want the bot to kick the user if the captcha is failed
+    caseSensitive: true, //optional, defaults to true. whether you want the captcha responses to be case-sensitive
+    attempts: 3, //optional, defaults to 1. number of attempts before captcha is considered to be failed
+    timeout: 30000, //optional, defaults to 60000. time the user has to solve the captcha on each attempt in milliseconds
+    showAttemptCount: true, //optional, defaults to true. whether to show the number of attempts left in embed footer
+    customPromptEmbed: new EmbedBuilder(), //customise the embed that will be sent to the user when the captcha is requested
+    customSuccessEmbed: new EmbedBuilder(), //customise the embed that will be sent to the user when the captcha is solved
+    customFailureEmbed: new EmbedBuilder(), //customise the embed that will be sent to the user when they fail to solve the captcha
+});
+client.on("guildMemberAdd", async member => {
+    captcha.present(member);
+});
   client.on("interactionCreate", async (mainInteraction) => {
     if (!mainInteraction.isChatInputCommand()) return;
     client.user.setPresence({ status: 'online' });
