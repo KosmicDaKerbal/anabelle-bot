@@ -44,7 +44,11 @@ client.on("guildMemberAdd", async member => {
     if (!mainInteraction.isChatInputCommand()) return;
     client.user.setPresence({ status: 'online' });
     if (mainInteraction.guild === null){
-    index.setTitle("Invalid Interaction").setColor(0xff0000).setDescription(`Ew why are you sliding into my DM's\nThese commands are only usable in the ${process.env.BOT_NAME} Server`);//.setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
+      if (mainInteraction.commandName == "captcha"){
+          index.setTitle("Wrong Channel").setColor(0xff0000).setDescription(`Send this command in the <#1389110949436330014> channel.`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
+        } else {
+          index.setTitle("Invalid Interaction").setColor(0xff0000).setDescription(`Ew why are you sliding into my DM's\nThese commands are only usable in the ${process.env.BOT_NAME} Server`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
+        }
     await mainInteraction.reply({ embeds: [index] });
     } else {
       if (mainInteraction.member.roles.cache.some(role => role.name === process.env.VERIFIED_ROLE)) {
