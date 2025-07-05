@@ -28,8 +28,8 @@ const client = new Client({
     timeout: 180000,
     showAttemptCount: true,
     customPromptEmbed: new EmbedBuilder().setTitle("w̶̼̃ḣ̷̬a̶̞̽t̸͉̓ ̷͈͌i̴̘͝s̵̪̈ ̷̡̿ẗ̴̺ẖ̵̇î̷̞s̷̼̑?̷̼͛"),
-    customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage("https://i.postimg.cc/MHCZZcS4/Annabelle-Creation-Trailer2.jpg").setFooter({ text: `Teens of Maharashtra v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
-    customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage("https://i.postimg.cc/1X57gM9V/thumb-1920-686638.jpg").setFooter({ text: `Teens of Maharashtra v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
+    customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage("https://i.postimg.cc/MHCZZcS4/Annabelle-Creation-Trailer2.jpg").setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
+    customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage("https://i.postimg.cc/1X57gM9V/thumb-1920-686638.jpg").setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
 });
 client.on("guildMemberAdd", async member => {
     var role= member.guild.roles.cache.find(role => role.id === "1368095911305281536");
@@ -44,8 +44,8 @@ client.on("guildMemberAdd", async member => {
     if (!mainInteraction.isChatInputCommand()) return;
     client.user.setPresence({ status: 'online' });
     if (mainInteraction.guild === null){
-      index.setTitle("Invalid Interaction").setColor(0xff0000).setDescription(`Ew why are you sliding into my DM's\nThese commands are only usable in the ${process.env.BOT_NAME} Server`).setFooter(`Anabelle v${process.env.BOT_VERSION}`).setTimestamp();
-      await mainInteraction.reply({ embeds: [index] });
+    index.setTitle("Invalid Interaction").setColor(0xff0000).setDescription(`Ew why are you sliding into my DM's\nThese commands are only usable in the ${process.env.BOT_NAME} Server`);//.setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
+    await mainInteraction.reply({ embeds: [index] });
     } else {
       if (mainInteraction.member.roles.cache.some(role => role.name === process.env.VERIFIED_ROLE)) {
         switch (mainInteraction.commandName) {
