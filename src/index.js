@@ -73,9 +73,6 @@ client.on("guildMemberAdd", async member => {
                 case 'slowmode':
                   slowmode.set(mainInteraction);
                   break;
-                case 'purge':
-                  purge.execute(mainInteraction);
-                  break;
                 case 'restart':
                   const reboot = await restart.execute(mainInteraction);
                   if (reboot){
