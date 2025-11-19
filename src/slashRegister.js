@@ -25,20 +25,6 @@ const commands = [
         ],
     },
     {
-        name: 'purge',
-        description: "Purges Past Messages: Admin Command",
-        options: [
-            {
-                name: 'purge-limit',
-                description: 'Number of Messages',
-                type: ApplicationCommandOptionType.Integer,
-                required: true,
-                min_value: 1,
-                max_value: 100,
-            },
-        ],
-    },
-    {
         name: 'restart',
         description: 'Restarts the Bot: Admin Command',
     },
