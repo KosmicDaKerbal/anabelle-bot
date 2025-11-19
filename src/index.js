@@ -32,7 +32,10 @@ const client = new Client({
     customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage("https://i.postimg.cc/1X57gM9V/thumb-1920-686638.jpg").setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
 });
 client.on("guildMemberAdd", async member => {
-    if(member.user.bot) return;
+    if(member.user.bot) {
+        member.roles.add(member.guild.roles.cache.find(role => role.id === "1360993008060858488"));
+        return;
+    };
     var role= member.guild.roles.cache.find(role => role.id === "1368095911305281536");
     member.roles.add(role);
     captcha.present(member);
