@@ -9,6 +9,8 @@ function timeFormat (time){
 module.exports = {
   channel: async function (embed, lockchannel, channelId) {
     const res = new EmbedBuilder().setTitle("Channel Locked").setColor(0x8c3f7a).setTimestamp();
+    console.log(lockchannel);
+    console.log(channelId);
 //    const duration = embed.options.get("duration").value;
     try {
         await lockchannel.permissionOverwrites.edit(process.env.VERIFIED_ROLE, {
