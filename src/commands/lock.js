@@ -7,9 +7,10 @@ function timeFormat (time){
   return `${time} seconds`;
   }
 module.exports = {
-  channel: async function (embed, lockchannel, channelId) {
+  channel: async function (embed, client, channelId) {
     const res = new EmbedBuilder().setTitle("Channel Locked").setColor(0x8c3f7a).setTimestamp();
 //    const duration = embed.options.get("duration").value;
+    const lockchannel = client.channels.fetch(mainInteraction.options.get("lock-channel-name").value);
     try {
         console.log(lockchannel.permissionOverwrites);
         await lockchannel.permissionOverwrites.set([
