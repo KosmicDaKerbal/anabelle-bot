@@ -73,12 +73,12 @@ client.on("guildMemberAdd", async member => {
             if (mainInteraction.member.roles.cache.some(role => role.name === process.env.SERVER_OWNER) || mainInteraction.member.roles.cache.some(role => role.name === process.env.MODERATOR)) {
               switch (mainInteraction.commandName) {
                 case "lock":
-                  const lockchannel = client.channels.fetch(mainInteraction.options.get("channelName").value);
-                  lock.channel(mainInteraction, lockchannel, mainInteraction.options.get("channelName").value);
+                  const lockchannel = client.channels.fetch(mainInteraction.options.get("lockChannelName").value);
+                  lock.channel(mainInteraction, lockchannel, mainInteraction.options.get("lockChannelName").value);
                   break;
                 case "unlock":
-                  const unlockchannel = client.channels.fetch(mainInteraction.options.get("channelName").value);
-                  unlock.channel(mainInteraction, unlockchannel, mainInteraction.options.get("channelName").value);
+                  const unlockchannel = client.channels.fetch(mainInteraction.options.get("unlockChannelName").value);
+                  unlock.channel(mainInteraction, unlockchannel, mainInteraction.options.get("unlockChannelName").value);
                   break;
                 case 'slowmode':
                   slowmode.set(mainInteraction);
