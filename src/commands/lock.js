@@ -11,13 +11,18 @@ module.exports = {
     const res = new EmbedBuilder().setTitle("Channel Locked").setColor(0x8c3f7a).setTimestamp();
 //    const duration = embed.options.get("duration").value;
     try {
-        await lockchannel.permissionOverwrites.edit(process.env.VERIFIED_ROLE, {
-            [PermissionsBitField.Flags.SendMessages]: false,
-            [PermissionsBitField.Flags.SendMessagesInThreads]: false,
-            [PermissionsBitField.Flags.CreatePublicThreads]: false,
-            [PermissionsBitField.Flags.CreatePrivateThreads]: false,
-            [PermissionsBitField.Flags.AddReactions]: false
-        });
+        lockchannel.overwritePermissions([
+            {
+            id: process.env.VERIFIED_ROLE,
+            allow: [
+            [PermissionsBitField.Flags.SendMessages],
+            [PermissionsBitField.Flags.SendMessagesInThreads],
+            [PermissionsBitField.Flags.CreatePublicThreads],
+            [PermissionsBitField.Flags.CreatePrivateThreads],
+            [PermissionsBitField.Flags.AddReactions]
+            ],
+            },
+        ]);
         res.setDescription(`No p̴̦͘l̵̩̋ȃ̸͕y̶̾ͅḯ̵͖n̶̗̿g̸̺̉ in <#${channelId}> a̷̱͠ǹ̵̲y̴̜̒m̵̱̓o̵̱̔ŕ̵͖e̵̺͑...`);
     }
     catch (e){
