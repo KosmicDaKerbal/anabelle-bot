@@ -34,14 +34,14 @@ const commands = [
                 type: ApplicationCommandOptionType.Channel,
                 required: true,
             },
-            {
+            /*{
                 name: 'duration',
                 description: 'Duration in seconds',
                 type: ApplicationCommandOptionType.Integer,
                 required: false,
                 min_value: 1,
                 max_value: 86400
-            },
+            },*/
         ],
     },
     {
@@ -54,14 +54,14 @@ const commands = [
                 type: ApplicationCommandOptionType.Channel,
                 required: true,
             },
-            {
+            /*{
                 name: 'duration',
                 description: 'Duration in seconds',
                 type: ApplicationCommandOptionType.Integer,
                 required: false,
                 min_value: 1,
                 max_value: 86400
-            },
+            },*/
         ],
     },
     {
