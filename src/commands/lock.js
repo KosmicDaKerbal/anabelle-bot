@@ -8,10 +8,11 @@ function timeFormat (time){
   }
 module.exports = {
   channel: async function (embed, lockchannel, vrf , channelId) {
+
     const res = new EmbedBuilder().setTitle("Channel Locked").setColor(0x8c3f7a).setTimestamp();
 //    const duration = embed.options.get("duration").value;
     try {
-        await lockchannel.permissionOverwrites.edit(vrf, {
+        await lockchannel.permissionOverwrites.create(process.env.VERIFIED_ROLE, {
         SendMessages: false,
         SendMessagesInThreads: false,
         CreatePublicThreads: false,
