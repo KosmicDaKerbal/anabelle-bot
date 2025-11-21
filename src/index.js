@@ -6,6 +6,8 @@ const insult = require('./commands/insultme');
 const restart = require('./commands/restart');
 const slowmode = require("./commands/slowmode");
 const verify = require("./commands/captcha");
+const lock = require("./commands/lock");
+const unlock = require("./commands/unlock");
 const client = new Client({
     intents: [
       IntentsBitField.Flags.Guilds,
@@ -70,6 +72,14 @@ client.on("guildMemberAdd", async member => {
           default:
             if (mainInteraction.member.roles.cache.some(role => role.name === process.env.SERVER_OWNER) || mainInteraction.member.roles.cache.some(role => role.name === process.env.MODERATOR)) {
               switch (mainInteraction.commandName) {
+                case "lock":
+                  const lockchannel = client.channels.fetch(mainInteraction.options.get("channelName").value);
+                  lock.channel(mainInteraction, lockchannel, mainInteraction.options.get("channelName").value);
+                  break;
+                case "unlock":
+                  const unlockchannel = client.channels.fetch(mainInteraction.options.get("channelName").value);
+                  unlock.channel(mainInteraction, unlockchannel, mainInteraction.options.get("channelName").value);
+                  break;
                 case 'slowmode':
                   slowmode.set(mainInteraction);
                   break;

@@ -25,6 +25,46 @@ const commands = [
         ],
     },
     {
+        name: 'lock',
+        description: "Lock a channel: Admin Command",
+        options: [
+            {
+                name: 'channelName',
+                description: 'Name of the channel',
+                type: ApplicationCommandOptionType.Channel,
+                required: true,
+            },
+            {
+                name: 'duration',
+                description: 'Duration in seconds',
+                type: ApplicationCommandOptionType.Integer,
+                required: false,
+                min_value: 1,
+                max_value: 86400
+            },
+        ],
+    },
+    {
+        name: 'unlock',
+        description: "Unlock a channel: Admin Command",
+        options: [
+            {
+                name: 'channelName',
+                description: 'Name of the channel',
+                type: ApplicationCommandOptionType.Channel,
+                required: true,
+            },
+            {
+                name: 'duration',
+                description: 'Duration in seconds',
+                type: ApplicationCommandOptionType.Integer,
+                required: false,
+                min_value: 1,
+                max_value: 86400
+            },
+        ],
+    },
+    {
         name: 'restart',
         description: 'Restarts the Bot: Admin Command',
     },
