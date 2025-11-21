@@ -29,7 +29,7 @@ const commands = [
         description: "Lock a channel: Admin Command",
         options: [
             {
-                name: 'lockChannelName',
+                name: 'lock-channel-name',
                 description: 'Name of the channel',
                 type: ApplicationCommandOptionType.Channel,
                 required: true,
@@ -49,7 +49,7 @@ const commands = [
         description: "Unlock a channel: Admin Command",
         options: [
             {
-                name: 'unlockChannelName',
+                name: 'unlock-channel-name',
                 description: 'Name of the channel',
                 type: ApplicationCommandOptionType.Channel,
                 required: true,
