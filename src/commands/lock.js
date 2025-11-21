@@ -9,8 +9,6 @@ function timeFormat (time){
 module.exports = {
   channel: async function (embed, lockchannel, channelId) {
     const res = new EmbedBuilder().setTitle("Channel Locked").setColor(0x8c3f7a).setTimestamp();
-    console.log(lockchannel);
-    console.log(channelId);
 //    const duration = embed.options.get("duration").value;
     try {
         await lockchannel.permissionOverwrites.edit(process.env.VERIFIED_ROLE, {
@@ -23,7 +21,7 @@ module.exports = {
         res.setDescription(`No p̴̦͘l̵̩̋ȃ̸͕y̶̾ͅḯ̵͖n̶̗̿g̸̺̉ in <#${channelId}> a̷̱͠ǹ̵̲y̴̜̒m̵̱̓o̵̱̔ŕ̵͖e̵̺͑...`);
     }
     catch (e){
-        res.setColor(0xff0000).setDescription(`Ĕ̷̼ȓ̴͇r̵̮̉ô̵̬ṟ̷̓`);
+        res.setColor(0xff0000).setDescription(`Ĕ̷̼ȓ̴͇r̵̮̉ô̵̬ṟ̷̓\n\`\`\`\n${e}\n\`\`\``);
     }
     finally{
         await embed.reply({ embeds: [res] });
