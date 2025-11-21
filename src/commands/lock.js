@@ -1,4 +1,4 @@
-const {EmbedBuilder, PermissionsBitField} = require("discord.js");
+const {EmbedBuilder, PermissionsBitField, PermissionFlagsBits} = require("discord.js");
 const process = require("process");
 function timeFormat (time){
   time = Math.round(time);
@@ -13,18 +13,13 @@ module.exports = {
     const lockchannel = client.channels.fetch(embed.options.get("lock-channel-name").value);
     try {
         console.log(lockchannel);
-        await lockchannel.permissionOverwrites.set([
-            {
-            id: process.env.VERIFIED_ROLE,
-            allow: [
-            [PermissionsBitField.Flags.SendMessages],
-            [PermissionsBitField.Flags.SendMessagesInThreads],
-            [PermissionsBitField.Flags.CreatePublicThreads],
-            [PermissionsBitField.Flags.CreatePrivateThreads],
-            [PermissionsBitField.Flags.AddReactions]
-            ],
-            },
-        ]);
+        await lockchannel.permissionOverwrites.edit(process.env.VERIFIED_ROLE, {
+        SendMessages: false,
+        SendMessagesInThreads: false,
+        CreatePublicThreads: false,
+        CreatePrivateThreads: false,
+        AddReactions: false
+    });
         res.setDescription(`No p̴̦͘l̵̩̋ȃ̸͕y̶̾ͅḯ̵͖n̶̗̿g̸̺̉ in <#${channelId}> a̷̱͠ǹ̵̲y̴̜̒m̵̱̓o̵̱̔ŕ̵͖e̵̺͑...`);
     }
     catch (e){
