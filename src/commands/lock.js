@@ -20,13 +20,15 @@ module.exports = {
             [PermissionsBitField.Flags.CreatePrivateThreads]: false,
             [PermissionsBitField.Flags.AddReactions]: false
         });
+        res.setDescription(`No p̴̦͘l̵̩̋ȃ̸͕y̶̾ͅḯ̵͖n̶̗̿g̸̺̉ in <#${channelId}> a̷̱͠ǹ̵̲y̴̜̒m̵̱̓o̵̱̔ŕ̵͖e̵̺͑...`);
     }
     catch (e){
         res.setColor(0xff0000).setDescription(`Ĕ̷̼ȓ̴͇r̵̮̉ô̵̬ṟ̷̓`);
     }
+    finally{
+        await embed.reply({ embeds: [res] });
+    }
     //if (!duration) 
-    res.setDescription(`No p̴̦͘l̵̩̋ȃ̸͕y̶̾ͅḯ̵͖n̶̗̿g̸̺̉ in <#${channelId}> a̷̱͠ǹ̵̲y̴̜̒m̵̱̓o̵̱̔ŕ̵͖e̵̺͑...`);
-    //else res.setDescription(`No playing in <#${channelId}> for ${timeFormat(duration)} anymore...`);
-    await embed.reply({ embeds: [res] });
+    //else res.setDescription(`No playing in <#${channelId}> for ${timeFormat(duration)} anymore...`); 
   }
 }
