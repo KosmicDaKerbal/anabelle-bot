@@ -11,7 +11,7 @@ module.exports = {
     const res = new EmbedBuilder().setTitle("Channel Locked").setColor(0x8c3f7a).setTimestamp();
 //    const duration = embed.options.get("duration").value;
     try {
-        lockchannel.overwritePermissions([
+        await lockchannel.permissionOverwrites.set([
             {
             id: process.env.VERIFIED_ROLE,
             allow: [
