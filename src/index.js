@@ -74,7 +74,7 @@ client.on("guildMemberAdd", async member => {
               switch (mainInteraction.commandName) {
                 case "lock":
                   const lockchannel = client.channels.fetch(mainInteraction.options.get("lock-channel-name").value);
-                  const vfrole = guild.roles.cache.find(role => role.name === "Verified");
+                  const vfrole = mainInteraction.guild.roles.cache.find(role => role.name === "Verified");
                   lock.channel(mainInteraction, lockchannel, vfrole, mainInteraction.options.get("lock-channel-name").value);  
                   break;
                 case "unlock":
