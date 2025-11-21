@@ -12,7 +12,7 @@ module.exports = {
 //    const duration = embed.options.get("duration").value;
     const lockchannel = client.channels.fetch(embed.options.get("lock-channel-name").value);
     try {
-        console.log(lockchannel.permissionOverwrites);
+        console.log(lockchannel);
         await lockchannel.permissionOverwrites.set([
             {
             id: process.env.VERIFIED_ROLE,
