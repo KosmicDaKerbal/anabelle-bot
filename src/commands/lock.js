@@ -10,7 +10,6 @@ module.exports = {
   channel: async function (embed, lockchannel, channelId) {
     const res = new EmbedBuilder().setTitle("Channel Locked").setColor(0x8c3f7a).setTimestamp().setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
 //    const duration = embed.options.get("duration").value;
-    console.log(lockchannel.permissionOverwrites);
     try {
         await lockchannel.permissionOverwrites.edit(process.env.VERIFIED_ROLE_ID, {
         SendMessages: false,
