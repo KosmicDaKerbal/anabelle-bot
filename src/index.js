@@ -73,7 +73,7 @@ client.on("guildMemberAdd", async member => {
             if (mainInteraction.member.roles.cache.some(role => role.name === process.env.SERVER_OWNER) || mainInteraction.member.roles.cache.some(role => role.name === process.env.MODERATOR)) {
               switch (mainInteraction.commandName) {
                 case "lock":
-                  const lockchannel = client.channels.fetch(mainInteraction.options.get("lock-channel-name").value);
+                  const lockchannel = await client.channels.cache.fetch(mainInteraction.options.get("lock-channel-name").value);
                   lock.channel(mainInteraction, lockchannel, mainInteraction.options.get("lock-channel-name").value);  
                   break;
                 case "unlock":
