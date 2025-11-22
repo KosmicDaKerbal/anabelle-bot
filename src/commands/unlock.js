@@ -1,4 +1,4 @@
-const {EmbedBuilder, PermissionsBitField} = require("discord.js");
+const {EmbedBuilder} = require("discord.js");
 const process = require("process");
 function timeFormat (time){
   time = Math.round(time);
@@ -8,23 +8,25 @@ function timeFormat (time){
   }
 module.exports = {
   channel: async function (embed, unlockchannel, channelId) {
-    const res = new EmbedBuilder().setTitle("Channel Unlocked").setColor(0x8c3f7a).setTimestamp();
+    const res = new EmbedBuilder().setTitle("Channel Unlocked").setColor(0x8c3f7a).setTimestamp().setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
 //    const duration = embed.options.get("duration").value;
     try {
-        await unlockchannel.permissionOverwrites.edit(process.env.VERIFIED_ROLE, {
-            [PermissionsBitField.Flags.SendMessages]: true,
-            [PermissionsBitField.Flags.SendMessagesInThreads]: true,
-            [PermissionsBitField.Flags.CreatePublicThreads]: true,
-            [PermissionsBitField.Flags.CreatePrivateThreads]: true,
-            [PermissionsBitField.Flags.AddReactions]: true
-        });
+        await unlockchannel.permissionOverwrites.edit(process.env.VERIFIED_ROLE_ID, {
+        SendMessages: true,
+        SendMessagesInThreads: true,
+        CreatePublicThreads: true,
+        CreatePrivateThreads: true,
+        AddReactions: true
+    });
+        res.setDescription(`Wanna p̴̦͘l̵̩̋ȃ̸͕y̶̾ͅ  in <#${channelId}>?`);
     }
     catch (e){
-        res.setColor(0xff0000).setDescription(`Ĕ̷̼ȓ̴͇r̵̮̉ô̵̬ṟ̷̓`);
+        res.setColor(0xff0000).setDescription(`Ĕ̷̼ȓ̴͇r̵̮̉ô̵̬ṟ̷̓\n\`\`\`\n${e}\n\`\`\``);
+    }
+    finally{
+        await embed.reply({ embeds: [res] });
     }
     //if (!duration) 
-    res.setDescription(`Wanna p̶̺̊l̸͈͑a̵͙̒y̷̤͠  in <#${channelId}>?`);
-    //else res.setDescription(`No playing in <#${channelId}> for ${timeFormat(duration)} anymore...`);
-    await embed.reply({ embeds: [res] });
+    //else res.setDescription(`No playing in <#${channelId}> for ${timeFormat(duration)} anymore...`); 
   }
 }

@@ -1,4 +1,4 @@
-const {EmbedBuilder, PermissionsBitField, PermissionFlagsBits} = require("discord.js");
+const {EmbedBuilder} = require("discord.js");
 const process = require("process");
 function timeFormat (time){
   time = Math.round(time);
@@ -7,9 +7,8 @@ function timeFormat (time){
   return `${time} seconds`;
   }
 module.exports = {
-  channel: async function (embed, lockchannel, vrf , channelId) {
-
-    const res = new EmbedBuilder().setTitle("Channel Locked").setColor(0x8c3f7a).setTimestamp();
+  channel: async function (embed, lockchannel, channelId) {
+    const res = new EmbedBuilder().setTitle("Channel Locked").setColor(0x8c3f7a).setTimestamp().setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
 //    const duration = embed.options.get("duration").value;
     console.log(lockchannel.permissionOverwrites);
     try {
