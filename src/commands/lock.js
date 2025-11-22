@@ -13,7 +13,7 @@ module.exports = {
 //    const duration = embed.options.get("duration").value;
     console.log(lockchannel.permissionOverwrites);
     try {
-        await lockchannel.permissionOverwrites.create(vrf, {
+        await lockchannel.permissionOverwrites.edit(process.env.VERIFIED_ROLE_ID, {
         SendMessages: false,
         SendMessagesInThreads: false,
         CreatePublicThreads: false,

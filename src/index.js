@@ -20,8 +20,8 @@ const client = new Client({
   const index = new EmbedBuilder();
   var rbt;
   const captcha = new Captcha(client, {
-    roleID: "1368095832313692170",
-    channelID: "1389110949436330014",
+    roleID: process.env.VERIFIED_ROLE_ID,
+    channelID: process.env.CAPTCHA_CHANNEL_ID,
     sendToTextChannel: false,
     addRoleOnSuccess: true,
     kickOnFailure: true,
@@ -35,15 +35,15 @@ const client = new Client({
 });
 client.on("guildMemberAdd", async member => {
     if(member.user.bot) {
-        member.roles.add(member.guild.roles.cache.find(role => role.id === "1360993008060858488"));
+        member.roles.add(member.guild.roles.cache.find(role => role.id === process.env.BOT_ROLE_ID));
         return;
     };
-    var role= member.guild.roles.cache.find(role => role.id === "1368095911305281536");
+    var role= member.guild.roles.cache.find(role => role.id === process.env.UNVERIFIED_ROLE_ID);
     member.roles.add(role);
     captcha.present(member);
     captcha.on("success", data => {
     console.log(`${data.member.user.username} has solved a CAPTCHA.`);
-    data.member.roles.remove("1368095911305281536");
+    data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
 });
 });
   client.on("interactionCreate", async (mainInteraction) => {
@@ -51,7 +51,7 @@ client.on("guildMemberAdd", async member => {
     client.user.setPresence({ status: 'online' });
     if (mainInteraction.guild === null){
       if (mainInteraction.commandName == "captcha"){
-          index.setTitle("Wrong Channel").setColor(0xff0000).setDescription(`Send this command in the <#1389110949436330014> channel.`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
+          index.setTitle("Wrong Channel").setColor(0xff0000).setDescription(`Send this command in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
         } else {
           index.setTitle("Invalid Interaction").setColor(0xff0000).setDescription(`Ew why are you sliding into my DM's\nThese commands are only usable in the ${process.env.BOT_NAME} Server`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
         }
