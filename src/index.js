@@ -80,7 +80,7 @@ captcha.on("failure", async data => {
             console.log(`${data.member.user.username} has left the server.`);
             } else {
             console.log(`CAPTCHA fail message for ${data.member.user.username} sent`);
-            vindex.setTitle(`Captcha Fail`).setDescription(`Type /captcha in this DM or in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
+            vindex.setTitle(`Captcha Fail`).setDescription(`To retry, Type /captcha in this DM or in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
             client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
             console.log(`${data.member.user.username} does not allow DM's from bots.`);
             });
