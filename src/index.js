@@ -49,6 +49,7 @@ client.on("guildMemberAdd", async member => {
     await vchannel.send({ embeds: [vindex]});
     data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
 });
+/*
     captcha.on("timeout", async data => {
         console.log(`CAPTCHA for ${data.member.user.username} timed out`);
         try {
@@ -92,6 +93,7 @@ client.on("guildMemberAdd", async member => {
           console.log(`${data.member.user.username} has left the server.`);
           }
 });
+*/
 });
   client.on(Events.InteractionCreate , async (mainInteraction) => {
     if (!mainInteraction.isChatInputCommand()) return;
