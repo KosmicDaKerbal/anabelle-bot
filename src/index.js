@@ -24,16 +24,18 @@ const client = new Client({
     channelID: process.env.CAPTCHA_CHANNEL_ID,
     sendToTextChannel: false,
     addRoleOnSuccess: true,
-    kickOnFailure: true,
+    kickOnFailure: false,
     caseSensitive: true,
     attempts: 3,
-    timeout: 600000,
+    timeout: 180000,
     showAttemptCount: true,
     customPromptEmbed: new EmbedBuilder().setTitle("w̶̼̃ḣ̷̬a̶̞̽t̸͉̓ ̷͈͌i̴̘͝s̵̪̈ ̷̡̿ẗ̴̺ẖ̵̇î̷̞s̷̼̑?̷̼͛"),
     customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage(process.env.CAPTCHA_SUCCESS).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
     customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage(process.env.CAPTCHA_FAIL).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
 });
 client.on("guildMemberAdd", async member => {
+    const vindex = new EmbedBuilder();
+    const guild = await client.guilds.fetch(process.env.GUILD_ID);
     if(member.user.bot) {
         member.roles.add(await member.guild.roles.fetch(process.env.BOT_ROLE_ID));
         return;
@@ -43,9 +45,52 @@ client.on("guildMemberAdd", async member => {
     captcha.present(member);
     captcha.on("success", async data => {
     console.log(`${data.member.user.username} has solved a CAPTCHA.`);
-    const vindex = new EmbedBuilder().setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`);
+    vindex.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`);
     await vchannel.send({ embeds: [vindex]});
     data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
+});
+captcha.on("timeout", async data => {
+    console.log(`CAPTCHA for ${data.member.user.username} timed out`);
+    try {
+        await guild.members.fetch(data.member.user.id)
+        .then((member) => {
+          if (!member){
+            console.log(`${data.member.user.username} has left the server.`);
+            } else {
+            console.log(`CAPTCHA timeout for ${data.member.user.username}`);
+            vindex.setTitle(`Captcha Timeout`).setDescription(`Type /captcha in this DM or in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
+            client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
+            console.log(`${data.member.user.username} does not allow DM's from bots.`);
+            });
+          }
+        }).catch ((err) => {
+          console.log(`${data.member.user.username} has left the server.`);
+        });
+    } catch (e){
+      console.log(`${data.member.user.username} has left the server.`);
+      }
+});
+captcha.on("failure", async data => {
+    console.log(`CAPTCHA for ${data.member.user.username} answered incorrectly`);
+    try {
+        await guild.members.fetch(data.member.user.id)
+        .then((member) => {
+          if (!member){
+            console.log(`${data.member.user.username} has left the server.`);
+            } else {
+            console.log(`CAPTCHA answered incorrectly for ${data.member.user.username}`);
+            vindex.setTitle(`Captcha Fail`).setDescription(`You will be removed from the server: <t:${Math.floor(Date.now()/1000) + 5}:R>.\nRejoin if you're REALLY not a bot: https://discord.gg/5zHtG8UExx`);
+            client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
+            console.log(`${data.member.user.username} does not allow DM's from bots.`);
+            setTimeout(async () => { await member.kick("Anabelle is Watching"); }, 5000);
+            });
+          }
+        }).catch ((err) => {
+          console.log(`${data.member.user.username} has left the server.`);
+        });
+    } catch (e){
+      console.log(`${data.member.user.username} has left the server.`);
+      }
 });
 });
   client.on(Events.InteractionCreate , async (mainInteraction) => {
@@ -53,7 +98,8 @@ client.on("guildMemberAdd", async member => {
     client.user.setPresence({ status: 'online' });
     if (mainInteraction.guild === null){
       if (mainInteraction.commandName == "captcha"){
-          index.setTitle("Wrong Channel").setColor(0xff0000).setDescription(`Send this command in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
+          const channel = await client.channels.fetch(process.env.GCHAT_ID);
+          verify.start(mainInteraction, captcha, channel);
         } else {
           index.setTitle("Invalid Interaction").setColor(0xff0000).setDescription(`Ew why are you sliding into my DM's\nThese commands are only usable in the ${process.env.BOT_NAME} Server`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
         }
