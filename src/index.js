@@ -57,10 +57,11 @@ captcha.on("timeout", async data => {
           if (!member){
             console.log(`${data.member.user.username} has left the server.`);
             } else {
-            console.log(`CAPTCHA timeout for ${data.member.user.username}`);
-            vindex.setTitle(`Captcha Timeout`).setDescription(`Type /captcha in this DM or in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
+            console.log(`CAPTCHA timeout message for ${data.member.user.username} sent`);
+            vindex.setTitle(`Captcha Timeout`).setDescription(`You will be removed from the server: <t:${Math.floor(Date.now()/1000) + 5}:R>.\nRejoin if you're REALLY not a bot: https://discord.gg/5zHtG8UExx`);
             client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
             console.log(`${data.member.user.username} does not allow DM's from bots.`);
+            setTimeout(async () => { await member.kick("Anabelle is Watching").catch(()=>{console.log(`${data.member.user.username} already left.`)}); }, 5000);
             });
           }
         }).catch ((err) => {
@@ -78,11 +79,10 @@ captcha.on("failure", async data => {
           if (!member){
             console.log(`${data.member.user.username} has left the server.`);
             } else {
-            console.log(`CAPTCHA answered incorrectly for ${data.member.user.username}`);
-            vindex.setTitle(`Captcha Fail`).setDescription(`You will be removed from the server: <t:${Math.floor(Date.now()/1000) + 5}:R>.\nRejoin if you're REALLY not a bot: https://discord.gg/5zHtG8UExx`);
+            console.log(`CAPTCHA fail message for ${data.member.user.username} sent`);
+            vindex.setTitle(`Captcha Fail`).setDescription(`Type /captcha in this DM or in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
             client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
             console.log(`${data.member.user.username} does not allow DM's from bots.`);
-            setTimeout(async () => { await member.kick("Anabelle is Watching"); }, 5000);
             });
           }
         }).catch ((err) => {
