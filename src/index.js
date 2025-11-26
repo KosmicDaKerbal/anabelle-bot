@@ -35,18 +35,17 @@ const client = new Client({
 });
 client.on("guildMemberAdd", async member => {
     if(member.user.bot) {
-        member.roles.add(member.guild.roles.cache.find(role => role.id === process.env.BOT_ROLE_ID));
+        member.roles.add(await member.guild.roles.fetch(process.env.BOT_ROLE_ID));
         return;
     };
-    var role= member.guild.roles.cache.find(role => role.id === process.env.UNVERIFIED_ROLE_ID);
     const vchannel = await client.channels.fetch(process.env.GHCHAT_ID);
-    member.roles.add(role);
+    member.roles.add(await member.guild.roles.fetch(process.env.UNVERIFIED_ROLE_ID));
     captcha.present(member);
     captcha.on("success", async data => {
     console.log(`${data.member.user.username} has solved a CAPTCHA.`);
     const vindex = new EmbedBuilder().setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`);
     await vchannel.send({ embeds: [vindex]});
-    data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
+    await data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
 });
 });
   client.on("interactionCreate", async (mainInteraction) => {
