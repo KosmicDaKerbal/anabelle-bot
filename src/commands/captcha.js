@@ -1,9 +1,9 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, MessageFlags } = require("discord.js");
 const process = require("process");
 module.exports = {
     start: async function (embed, captchaObject, channel){
           const index = new EmbedBuilder().setTitle("Captcha Verification Process Started. Check your DM's.");
-          await embed.reply({ embeds: [index], ephemeral: true });
+          await embed.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
           captchaObject.present(embed.member);
           captchaObject.on("success", async data => {
           console.log(`${data.member.user.username} has solved a CAPTCHA.`);
