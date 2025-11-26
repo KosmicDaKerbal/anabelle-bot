@@ -80,7 +80,7 @@ captcha.on("failure", async data => {
             console.log(`${data.member.user.username} has left the server.`);
             } else {
             console.log(`CAPTCHA fail message for ${data.member.user.username} sent`);
-            vindex.setTitle(`Captcha Fail`).setDescription(`To retry, Type /captcha in this DM or in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
+            vindex.setTitle(`Captcha Fail`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
             client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
             console.log(`${data.member.user.username} does not allow DM's from bots.`);
             });
@@ -98,9 +98,7 @@ captcha.on("failure", async data => {
     client.user.setPresence({ status: 'online' });
     if (mainInteraction.guild === null){
       if (mainInteraction.commandName == "captcha"){
-          console.log(mainInteraction);
-          //const channel = await client.channels.fetch(process.env.GCHAT_ID);
-          //verify.start(mainInteraction, captcha, channel);
+          index.setTitle("Wrong Channel").setColor(0xff0000).setDescription(`Send this command in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
         } else {
           index.setTitle("Invalid Interaction").setColor(0xff0000).setDescription(`Ew why are you sliding into my DM's\nThese commands are only usable in the ${process.env.BOT_NAME} Server`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
         }
@@ -150,9 +148,8 @@ captcha.on("failure", async data => {
     } else {
        switch (mainInteraction.commandName) {
         case "captcha":
-          console.log(mainInteraction);
-          //const channel = await client.channels.fetch(process.env.GCHAT_ID);
-          //verify.start(mainInteraction, captcha, channel);
+          const channel = await client.channels.fetch(process.env.GCHAT_ID);
+          verify.start(mainInteraction, captcha, channel);
           break;
           default:
             index.setTitle("User not verified").setColor(0xff0000).setDescription(`Whoa there, we don't know whether you're a human or not.\nVerify yourself in the <#${process.env.VERIFICATION_CHANNEL}> channel`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
