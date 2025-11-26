@@ -98,7 +98,7 @@ captcha.on("failure", async data => {
     client.user.setPresence({ status: 'online' });
     if (mainInteraction.guild === null){
       if (mainInteraction.commandName == "captcha"){
-          console.log(mainInteraction.member);
+          console.log(mainInteraction);
           //const channel = await client.channels.fetch(process.env.GCHAT_ID);
           //verify.start(mainInteraction, captcha, channel);
         } else {
