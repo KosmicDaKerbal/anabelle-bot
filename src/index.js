@@ -27,7 +27,7 @@ const client = new Client({
     kickOnFailure: true,
     caseSensitive: true,
     attempts: 3,
-    timeout: 180000,
+    timeout: 600000,
     showAttemptCount: true,
     customPromptEmbed: new EmbedBuilder().setTitle("w̶̼̃ḣ̷̬a̶̞̽t̸͉̓ ̷͈͌i̴̘͝s̵̪̈ ̷̡̿ẗ̴̺ẖ̵̇î̷̞s̷̼̑?̷̼͛"),
     customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage("https://i.postimg.cc/MHCZZcS4/Annabelle-Creation-Trailer2.jpg").setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
@@ -45,7 +45,7 @@ client.on("guildMemberAdd", async member => {
     console.log(`${data.member.user.username} has solved a CAPTCHA.`);
     const vindex = new EmbedBuilder().setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`);
     await vchannel.send({ embeds: [vindex]});
-    await data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
+    data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
 });
 });
   client.on("interactionCreate", async (mainInteraction) => {
@@ -103,9 +103,8 @@ client.on("guildMemberAdd", async member => {
     } else {
        switch (mainInteraction.commandName) {
         case "captcha":
-          const channel = await client.channels.fetch('1360596156656390262');
-          console.log(channel);
-          //verify.start(mainInteraction, captcha, channel);
+          const channel = await client.channels.fetch(process.env.GHCHAT_ID);
+          verify.start(mainInteraction, captcha, channel);
           break;
           default:
             index.setTitle("User not verified").setColor(0xff0000).setDescription(`Whoa there, we don't know whether you're a human or not.\nVerify yourself in the <#${process.env.VERIFICATION_CHANNEL}> channel`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
