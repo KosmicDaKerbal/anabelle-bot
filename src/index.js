@@ -38,7 +38,7 @@ client.on("guildMemberAdd", async member => {
         member.roles.add(await member.guild.roles.fetch(process.env.BOT_ROLE_ID));
         return;
     };
-    const vchannel = await client.channels.fetch(process.env.GHCHAT_ID);
+    const vchannel = await client.channels.fetch(process.env.GCHAT_ID);
     member.roles.add(await member.guild.roles.fetch(process.env.UNVERIFIED_ROLE_ID));
     captcha.present(member);
     captcha.on("success", async data => {
@@ -103,7 +103,7 @@ client.on("guildMemberAdd", async member => {
     } else {
        switch (mainInteraction.commandName) {
         case "captcha":
-          const channel = await client.channels.fetch(process.env.GHCHAT_ID);
+          const channel = await client.channels.fetch(process.env.GCHAT_ID);
           verify.start(mainInteraction, captcha, channel);
           break;
           default:
