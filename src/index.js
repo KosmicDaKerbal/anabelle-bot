@@ -103,7 +103,7 @@ client.on("guildMemberAdd", async member => {
     } else {
        switch (mainInteraction.commandName) {
         case "captcha":
-          const channel = await client.channels.fetch(process.env.GHCHAT_ID);
+          const channel = await client.channels.fetch('1360596156656390262');
           console.log(channel);
           //verify.start(mainInteraction, captcha, channel);
           break;
