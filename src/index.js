@@ -27,11 +27,11 @@ const client = new Client({
     kickOnFailure: false,
     caseSensitive: true,
     attempts: 3,
-    timeout: 180000,
+    timeout: 600000,
     showAttemptCount: true,
     customPromptEmbed: new EmbedBuilder().setTitle("w̶̼̃ḣ̷̬a̶̞̽t̸͉̓ ̷͈͌i̴̘͝s̵̪̈ ̷̡̿ẗ̴̺ẖ̵̇î̷̞s̷̼̑?̷̼͛"),
     customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage(process.env.CAPTCHA_SUCCESS).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
-    customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage(process.env.CAPTCHA_FAIL).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
+    customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setDescription(`https://discord.gg/5zHtG8UExx`).setImage(process.env.CAPTCHA_FAIL).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
 });
 client.on("guildMemberAdd", async member => {
     const vindex = new EmbedBuilder();
@@ -49,48 +49,48 @@ client.on("guildMemberAdd", async member => {
     await vchannel.send({ embeds: [vindex]});
     data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
 });
-captcha.on("timeout", async data => {
-    console.log(`CAPTCHA for ${data.member.user.username} timed out`);
-    try {
-        await guild.members.fetch(data.member.user.id)
-        .then((member) => {
-          if (!member){
-            console.log(`${data.member.user.username} has left the server.`);
-            } else {
-            console.log(`CAPTCHA timeout message for ${data.member.user.username} sent`);
-            vindex.setTitle(`Captcha Timeout`).setDescription(`You will be removed from the server: <t:${Math.floor(Date.now()/1000) + 5}:R>.\nRejoin if you're REALLY not a bot: https://discord.gg/5zHtG8UExx`);
-            client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
-            console.log(`${data.member.user.username} does not allow DM's from bots.`);
-            setTimeout(async () => { await member.kick("Anabelle is Watching").catch(()=>{console.log(`${data.member.user.username} already left.`)}); }, 5000);
+    captcha.on("timeout", async data => {
+        console.log(`CAPTCHA for ${data.member.user.username} timed out`);
+        try {
+            await guild.members.fetch(data.member.user.id)
+            .then(async (member) => {
+              if (!member){
+                console.log(`${data.member.user.username} has left the server.`);
+                } else {
+                console.log(`CAPTCHA timeout message for ${data.member.user.username} sent`);
+                vindex.setTitle(`Captcha Timeout`).setDescription(`You will be removed from the server: <t:${Math.floor(Date.now()/1000) + 5}:R>.\nRejoin if you're REALLY not a bot: https://discord.gg/5zHtG8UExx`);
+                await client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
+                console.log(`${data.member.user.username} does not allow DM's from bots.`);
+                setTimeout(() => { member.kick("Anabelle is Watching").catch(()=>{console.log(`${data.member.user.username} already left.`)}); }, 5000);
+                });
+              }
+            }).catch ((err) => {
+              console.log(`${data.member.user.username} has left the server.`);
             });
-          }
-        }).catch ((err) => {
+        } catch (e){
           console.log(`${data.member.user.username} has left the server.`);
-        });
-    } catch (e){
-      console.log(`${data.member.user.username} has left the server.`);
-      }
+          }
 });
-captcha.on("failure", async data => {
-    console.log(`CAPTCHA for ${data.member.user.username} answered incorrectly`);
-    try {
-        await guild.members.fetch(data.member.user.id)
-        .then((member) => {
-          if (!member){
-            console.log(`${data.member.user.username} has left the server.`);
-            } else {
-            console.log(`CAPTCHA fail message for ${data.member.user.username} sent`);
-            vindex.setTitle(`Captcha Fail`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
-            client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
-            console.log(`${data.member.user.username} does not allow DM's from bots.`);
+    captcha.on("failure", async data => {
+        console.log(`CAPTCHA for ${data.member.user.username} answered incorrectly`);
+        try {
+            await guild.members.fetch(data.member.user.id)
+            .then(async (member) => {
+              if (!member){
+                console.log(`${data.member.user.username} has left the server.`);
+                } else {
+                console.log(`CAPTCHA fail message for ${data.member.user.username} sent`);
+                vindex.setTitle(`Captcha Fail`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
+                await client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
+                console.log(`${data.member.user.username} does not allow DM's from bots.`);
+                });
+              }
+            }).catch ((err) => {
+              console.log(`${data.member.user.username} has left the server.`);
             });
-          }
-        }).catch ((err) => {
+        } catch (e){
           console.log(`${data.member.user.username} has left the server.`);
-        });
-    } catch (e){
-      console.log(`${data.member.user.username} has left the server.`);
-      }
+          }
 });
 });
   client.on(Events.InteractionCreate , async (mainInteraction) => {
