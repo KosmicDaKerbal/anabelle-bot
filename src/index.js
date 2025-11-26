@@ -98,8 +98,9 @@ captcha.on("failure", async data => {
     client.user.setPresence({ status: 'online' });
     if (mainInteraction.guild === null){
       if (mainInteraction.commandName == "captcha"){
-          const channel = await client.channels.fetch(process.env.GCHAT_ID);
-          verify.start(mainInteraction, captcha, channel);
+          console.log(mainInteraction.member);
+          //const channel = await client.channels.fetch(process.env.GCHAT_ID);
+          //verify.start(mainInteraction, captcha, channel);
         } else {
           index.setTitle("Invalid Interaction").setColor(0xff0000).setDescription(`Ew why are you sliding into my DM's\nThese commands are only usable in the ${process.env.BOT_NAME} Server`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON });
         }
