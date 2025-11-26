@@ -42,10 +42,10 @@ client.on("guildMemberAdd", async member => {
     const vchannel = await client.channels.fetch(process.env.GHCHAT_ID);
     member.roles.add(role);
     captcha.present(member);
-    captcha.on("success", data => {
+    captcha.on("success", async data => {
     console.log(`${data.member.user.username} has solved a CAPTCHA.`);
     const vindex = new EmbedBuilder().setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`);
-    vchannel.send({ embeds: [vindex]});
+    await vchannel.send({ embeds: [vindex]});
     data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
 });
 });
