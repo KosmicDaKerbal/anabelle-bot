@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, IntentsBitField, EmbedBuilder, ActivityType } = require("discord.js");
+const { Client, IntentsBitField, EmbedBuilder, ActivityType, Events } = require("discord.js");
 const { Captcha } = require("discord.js-captcha");
 const help = require('./commands/help');
 const insult = require('./commands/insultme');
@@ -48,7 +48,7 @@ client.on("guildMemberAdd", async member => {
     data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
 });
 });
-  client.on("interactionCreate", async (mainInteraction) => {
+  client.on(Events.InteractionCreate , async (mainInteraction) => {
     if (!mainInteraction.isChatInputCommand()) return;
     client.user.setPresence({ status: 'online' });
     if (mainInteraction.guild === null){
@@ -117,7 +117,7 @@ client.on("guildMemberAdd", async member => {
       }
   });
   console.log("Connecting...");
-  client.on("ready", async (c) => {
+  client.once(Events.ClientReady, async (c) => {
     console.log("Anabelle is runnning");
     client.user.setPresence({
       activities: [
