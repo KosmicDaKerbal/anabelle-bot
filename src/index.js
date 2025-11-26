@@ -104,7 +104,8 @@ client.on("guildMemberAdd", async member => {
        switch (mainInteraction.commandName) {
         case "captcha":
           const channel = await client.channels.fetch(process.env.GHCHAT_ID);
-          verify.start(mainInteraction, captcha, channel);
+          console.log(channel);
+          //verify.start(mainInteraction, captcha, channel);
           break;
           default:
             index.setTitle("User not verified").setColor(0xff0000).setDescription(`Whoa there, we don't know whether you're a human or not.\nVerify yourself in the <#${process.env.VERIFICATION_CHANNEL}> channel`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
