@@ -53,15 +53,15 @@ client.on("guildMemberAdd", async member => {
         console.log(`CAPTCHA for ${data.member.user.username} timed out`);
         try {
             await guild.members.fetch(data.member.user.id)
-            .then(async (member) => {
+            .then((member) => {
               if (!member){
                 console.log(`${data.member.user.username} has left the server.`);
                 } else {
                 console.log(`CAPTCHA timeout message for ${data.member.user.username} sent`);
                 vindex.setTitle(`Captcha Timeout`).setDescription(`You will be removed from the server: <t:${Math.floor(Date.now()/1000) + 5}:R>.\nRejoin if you're REALLY not a bot: https://discord.gg/5zHtG8UExx`);
-                await client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
+                client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
                 console.log(`${data.member.user.username} does not allow DM's from bots.`);
-                setTimeout(() => { member.kick("Anabelle is Watching").catch(()=>{console.log(`${data.member.user.username} already left.`)}); }, 5000);
+                setTimeout(() => {member.kick("Anabelle is Watching").catch(()=>{console.log(`${data.member.user.username} already left.`)}); }, 5000);
                 });
               }
             }).catch ((err) => {
@@ -75,13 +75,13 @@ client.on("guildMemberAdd", async member => {
         console.log(`CAPTCHA for ${data.member.user.username} answered incorrectly`);
         try {
             await guild.members.fetch(data.member.user.id)
-            .then(async (member) => {
+            .then((member) => {
               if (!member){
                 console.log(`${data.member.user.username} has left the server.`);
                 } else {
                 console.log(`CAPTCHA fail message for ${data.member.user.username} sent`);
                 vindex.setTitle(`Captcha Fail`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
-                await client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
+                client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
                 console.log(`${data.member.user.username} does not allow DM's from bots.`);
                 });
               }
