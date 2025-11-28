@@ -1,11 +1,10 @@
 require('dotenv').config();
-const { Client, IntentsBitField, EmbedBuilder, ActivityType, Events } = require("discord.js");
+const { Client, IntentsBitField, EmbedBuilder, ActivityType, Events, MessageFlags } = require("discord.js");
 const { Captcha } = require("discord.js-captcha");
 const help = require('./commands/help');
 const insult = require('./commands/insultme');
 const restart = require('./commands/restart');
 const slowmode = require("./commands/slowmode");
-const verify = require("./commands/captcha");
 const lock = require("./commands/lock");
 const unlock = require("./commands/unlock");
 const client = new Client({
@@ -49,51 +48,6 @@ client.on("guildMemberAdd", async member => {
     await vchannel.send({ embeds: [vindex]});
     data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
 });
-/*
-    captcha.on("timeout", async data => {
-        console.log(`CAPTCHA for ${data.member.user.username} timed out`);
-        try {
-            await guild.members.fetch(data.member.user.id)
-            .then((member) => {
-              if (!member){
-                console.log(`${data.member.user.username} has left the server.`);
-                } else {
-                console.log(`CAPTCHA timeout message for ${data.member.user.username} sent`);
-                vindex.setTitle(`Captcha Timeout`).setDescription(`You will be removed from the server: <t:${Math.floor(Date.now()/1000) + 5}:R>.\nRejoin if you're REALLY not a bot: https://discord.gg/5zHtG8UExx`);
-                client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
-                console.log(`${data.member.user.username} does not allow DM's from bots.`);
-                setTimeout(() => {member.kick("Anabelle is Watching").catch(()=>{console.log(`${data.member.user.username} already left.`)}); }, 5000);
-                });
-              }
-            }).catch ((err) => {
-              console.log(`${data.member.user.username} has left the server.`);
-            });
-        } catch (e){
-          console.log(`${data.member.user.username} has left the server.`);
-          }
-});
-    captcha.on("failure", async data => {
-        console.log(`CAPTCHA for ${data.member.user.username} answered incorrectly`);
-        try {
-            await guild.members.fetch(data.member.user.id)
-            .then((member) => {
-              if (!member){
-                console.log(`${data.member.user.username} has left the server.`);
-                } else {
-                console.log(`CAPTCHA fail message for ${data.member.user.username} sent`);
-                vindex.setTitle(`Captcha Fail`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
-                client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
-                console.log(`${data.member.user.username} does not allow DM's from bots.`);
-                });
-              }
-            }).catch ((err) => {
-              console.log(`${data.member.user.username} has left the server.`);
-            });
-        } catch (e){
-          console.log(`${data.member.user.username} has left the server.`);
-          }
-});
-*/
 });
   client.on(Events.InteractionCreate , async (mainInteraction) => {
     if (!mainInteraction.isChatInputCommand()) return;
@@ -151,7 +105,19 @@ client.on("guildMemberAdd", async member => {
        switch (mainInteraction.commandName) {
         case "captcha":
           const channel = await client.channels.fetch(process.env.GCHAT_ID);
-          verify.start(mainInteraction, captcha, channel);
+          index.setTitle("Captcha Verification Process Started. Check your DM's.");
+          await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
+          captcha.present(mainInteraction.member);
+          captcha.on("success", async data => {
+          console.log(`${data.member.user.username} has solved a CAPTCHA.`);
+          index.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`);
+          await channel.send({ embeds: [index] });
+          try {
+            data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
+          } catch (e){
+            console.log(e);
+          }
+          });
           break;
           default:
             index.setTitle("User not verified").setColor(0xff0000).setDescription(`Whoa there, we don't know whether you're a human or not.\nVerify yourself in the <#${process.env.VERIFICATION_CHANNEL}> channel`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
