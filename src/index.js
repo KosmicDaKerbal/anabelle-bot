@@ -130,7 +130,7 @@ captcha.on("timeout", async data => {
             vindex.setTitle(`Captcha Timeout`).setDescription(`You will be removed from the server: <t:${Math.floor(Date.now()/1000) + 5}:R>.\nRejoin if you're REALLY not a bot: https://discord.gg/5zHtG8UExx`);
             client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
             console.log(`${data.member.user.username} does not allow DM's from bots.`);
-            setTimeout(async () => { await member.kick("Anabelle is Watching").catch(()=>{console.log(`${data.member.user.username} already left.`)}); }, 5000);
+            setTimeout(() => { member.kick("Anabelle is Watching").catch(()=>{console.log(`${data.member.user.username} already left.`)}); }, 5000);
             });
           }
         }).catch ((err) => {
