@@ -109,9 +109,9 @@ client.on("guildMemberAdd", async member => {
         setTimeout(() => { client.user.setPresence({ status: 'idle' }); }, 10000);
       }
   });
-  const vchannel = await client.channels.fetch(process.env.GCHAT_ID);
   const vindex = new EmbedBuilder();
   captcha.on("success", async data => {
+    const vchannel = await client.channels.fetch(process.env.GCHAT_ID);
     console.log(`${data.member.user.username} has solved a CAPTCHA.`);
     vindex.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`).setDescription("\u200b");
     await vchannel.send({ embeds: [vindex]});
