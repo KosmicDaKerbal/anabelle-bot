@@ -3,6 +3,7 @@
   "version": "0.2",
   "description": "An automoderation app for the r/TeensofMaharashtra Discord Server.",
   "main": "src/index.js",
+  "type": "commonjs",
   "scripts": {
     "start": "git pull https://github.com/KosmicDaKerbal/anabelle-bot.git && npm i && node ."
   },
