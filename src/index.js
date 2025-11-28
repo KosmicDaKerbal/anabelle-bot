@@ -23,7 +23,7 @@ const client = new Client({
     channelID: process.env.CAPTCHA_CHANNEL_ID,
     sendToTextChannel: false,
     addRoleOnSuccess: true,
-    kickOnFailure: true,
+    kickOnFailure: false,
     caseSensitive: true,
     attempts: 3,
     timeout: 600000,
