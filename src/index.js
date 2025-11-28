@@ -33,21 +33,12 @@ const client = new Client({
     customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setDescription(`https://discord.gg/5zHtG8UExx`).setImage(process.env.CAPTCHA_FAIL).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
 });
 client.on("guildMemberAdd", async member => {
-    const vindex = new EmbedBuilder();
-    const guild = await client.guilds.fetch(process.env.GUILD_ID);
     if(member.user.bot) {
         member.roles.add(await member.guild.roles.fetch(process.env.BOT_ROLE_ID));
         return;
     };
-    const vchannel = await client.channels.fetch(process.env.GCHAT_ID);
     member.roles.add(await member.guild.roles.fetch(process.env.UNVERIFIED_ROLE_ID));
     captcha.present(member);
-    captcha.on("success", async data => {
-    console.log(`${data.member.user.username} has solved a CAPTCHA.`);
-    vindex.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`);
-    await vchannel.send({ embeds: [vindex]});
-    data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
-});
 });
   client.on(Events.InteractionCreate , async (mainInteraction) => {
     if (!mainInteraction.isChatInputCommand()) return;
@@ -104,24 +95,13 @@ client.on("guildMemberAdd", async member => {
     } else {
        switch (mainInteraction.commandName) {
         case "captcha":
-          const channel = await client.channels.fetch(process.env.GCHAT_ID);
           index.setTitle("Captcha Verification Process Started. Check your DM's.");
           await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
           captcha.present(mainInteraction.member);
-          captcha.on("success", async data => {
-          console.log(`${data.member.user.username} has solved a CAPTCHA.`);
-          index.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`);
-          await channel.send({ embeds: [index] });
-          try {
-            data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
-          } catch (e){
-            console.log(e);
-          }
-          });
           break;
           default:
             index.setTitle("User not verified").setColor(0xff0000).setDescription(`Whoa there, we don't know whether you're a human or not.\nVerify yourself in the <#${process.env.VERIFICATION_CHANNEL}> channel`).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
-            await mainInteraction.reply({ embeds: [index], ephemeral: true });
+            await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
        }
     }
     }
@@ -129,6 +109,14 @@ client.on("guildMemberAdd", async member => {
         setTimeout(() => { client.user.setPresence({ status: 'idle' }); }, 10000);
       }
   });
+  captcha.on("success", async data => {
+    const vchannel = await client.channels.fetch(process.env.GCHAT_ID);
+    const vindex = new EmbedBuilder();
+    console.log(`${data.member.user.username} has solved a CAPTCHA.`);
+    vindex.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`);
+    await vchannel.send({ embeds: [vindex]});
+    data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
+});
   console.log("Connecting...");
   client.once(Events.ClientReady, async (c) => {
     console.log("Anabelle is runnning");
