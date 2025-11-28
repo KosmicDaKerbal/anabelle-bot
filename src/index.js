@@ -113,32 +113,9 @@ client.on("guildMemberAdd", async member => {
   captcha.on("success", async data => {
     const vchannel = await client.channels.fetch(process.env.GCHAT_ID);
     console.log(`${data.member.user.username} has solved a CAPTCHA.`);
-    vindex.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`).setDescription("\u200b");
+    vindex.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`).setDescription('');
     await vchannel.send({ embeds: [vindex]});
     data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
-});
-captcha.on("timeout", async data => {
-    const guild = await client.guilds.fetch(process.env.GUILD_ID);
-    console.log(`CAPTCHA for ${data.member.user.username} timed out`);
-    try {
-        await guild.members.fetch(data.member.user.id)
-        .then((member) => {
-          if (!member){
-            console.log(`${data.member.user.username} has left the server.`);
-            } else {
-            console.log(`CAPTCHA timeout message for ${data.member.user.username} sent`);
-            vindex.setTitle(`Captcha Timeout`).setDescription(`You will be removed from the server: <t:${Math.floor(Date.now()/1000) + 5}:R>.\nRejoin if you're REALLY not a bot: https://discord.gg/5zHtG8UExx`);
-            client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
-            console.log(`${data.member.user.username} does not allow DM's from bots.`);
-            setTimeout(async () => { await data.member.kick("Anabelle is Watching").catch(()=>{console.log(`${data.member.user.username} already left.`)}); }, 5000);
-            });
-          }
-        }).catch ((err) => {
-          console.log(`${data.member.user.username} has left the server.`);
-        });
-    } catch (e){
-      console.log(`${data.member.user.username} has left the server.`);
-      }
 });
 captcha.on("failure", async data => {
     const guild = await client.guilds.fetch(process.env.GUILD_ID);
@@ -151,6 +128,28 @@ captcha.on("failure", async data => {
             } else {
             console.log(`CAPTCHA fail message for ${data.member.user.username} sent`);
             vindex.setTitle(`Captcha Fail`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
+            client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
+            console.log(`${data.member.user.username} does not allow DM's from bots.`);
+            });
+          }
+        }).catch ((err) => {
+          console.log(`${data.member.user.username} has left the server.`);
+        });
+    } catch (e){
+      console.log(`${data.member.user.username} has left the server.`);
+      }
+});
+captcha.on("timeout", async data => {
+    const guild = await client.guilds.fetch(process.env.GUILD_ID);
+    console.log(`CAPTCHA for ${data.member.user.username} timed out`);
+    try {
+        await guild.members.fetch(data.member.user.id)
+        .then((member) => {
+          if (!member){
+            console.log(`${data.member.user.username} has left the server.`);
+            } else {
+            console.log(`CAPTCHA timeout message for ${data.member.user.username} sent`);
+            vindex.setTitle(`Captcha timed out`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
             client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
             console.log(`${data.member.user.username} does not allow DM's from bots.`);
             });
