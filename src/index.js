@@ -113,7 +113,7 @@ client.on("guildMemberAdd", async member => {
   captcha.on("success", async data => {
     const vchannel = await client.channels.fetch(process.env.GCHAT_ID);
     console.log(`${data.member.user.username} has solved a CAPTCHA.`);
-    vindex.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`).setDescription('');
+    vindex.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`).setDescription(null);
     await vchannel.send({ embeds: [vindex]});
     data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
 });
