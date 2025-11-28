@@ -55,7 +55,7 @@ client.on("guildMemberAdd", async member => {
         switch (mainInteraction.commandName) {
           case "captcha":
           index.setTitle("User is already verified.").setColor(0x00ff00);
-          await mainInteraction.reply({ embeds: [index], ephemeral: true });
+          await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
           break;
           case "help":
             help.send(mainInteraction);
@@ -88,7 +88,7 @@ client.on("guildMemberAdd", async member => {
                 }
               } else {
                 index.setTitle("Nice try, pleb").setColor(0xff0000).setDescription("You cannot use admin commands when you're not one, duh.").setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
-                await mainInteraction.reply({ embeds: [index], ephemeral: true });
+                await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
               }
               break;
         }
