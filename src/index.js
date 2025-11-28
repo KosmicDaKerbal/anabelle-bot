@@ -118,6 +118,7 @@ client.on("guildMemberAdd", async member => {
     data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
 });
 captcha.on("timeout", async data => {
+    const guild = await client.guilds.fetch(process.env.GUILD_ID);
     console.log(`CAPTCHA for ${data.member.user.username} timed out`);
     try {
         await guild.members.fetch(data.member.user.id)
@@ -140,6 +141,7 @@ captcha.on("timeout", async data => {
       }
 });
 captcha.on("failure", async data => {
+    const guild = await client.guilds.fetch(process.env.GUILD_ID);
     console.log(`CAPTCHA for ${data.member.user.username} answered incorrectly`);
     try {
         await guild.members.fetch(data.member.user.id)
