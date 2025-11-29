@@ -40,6 +40,15 @@ client.on("guildMemberAdd", async member => {
     member.roles.add(await member.guild.roles.fetch(process.env.UNVERIFIED_ROLE_ID));
     captcha.present(member);
 });
+client.on (Events.MessageCreate, async (textInteraction) => {
+if (textInteraction.author.bot) return;
+switch (textInteraction.content.toLowerCase()){
+  case "owo kill <@1368084032901877870>":
+    await client.users.send(textInteraction.author.id, {embeds: [new EmbedBuilder().setImage(process.env.OWO_IMG)]});
+    break;
+}
+
+});
   client.on(Events.InteractionCreate , async (mainInteraction) => {
     if (!mainInteraction.isChatInputCommand()) return;
     client.user.setPresence({ status: 'online' });
