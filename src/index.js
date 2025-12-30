@@ -223,7 +223,7 @@ captcha.on("timeout", async data => {
       {
         type: ActivityType.Custom,
         name: "custom",
-        state: (process.env.MAINTAINENCE_MODE.toLowerCase === "false") ? "u/mi_tatyavinchoo's secret admirer" : "--MAINTANENCE MODE--"
+        state: (process.env.MAINTANENCE_MODE.toLowerCase === "false") ? "u/mi_tatyavinchoo's secret admirer" : "--MAINTANENCE MODE--"
       }
     ],
       status: 'idle'
