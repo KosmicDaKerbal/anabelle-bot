@@ -61,7 +61,7 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
 	try {
     client.user.setPresence({status: 'online'});
 		await command.execute(mainInteraction);
-    if (mainInteraction.commandName != 'restart') setTimeout(() => client.user.setPresence({status: 'idle'}), 5000);
+    setTimeout(() => {if (mainInteraction.commandName != 'restart') client.user.setPresence({status: 'idle'});}, 5000);
 	} catch (error) {
     index.setTitle("Error executing command").setDescription((process.env.MAINTANENCE_MODE === '0') ? "There was an error executing the command" : `Log: \n\`\`\`${error}\n\`\`\``).setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
 		if (mainInteraction.replied || mainInteraction.deferred) await mainInteraction.followUp({ embeds: [index], flags: MessageFlags.Ephemeral });
