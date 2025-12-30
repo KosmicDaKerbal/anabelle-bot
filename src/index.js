@@ -54,7 +54,8 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
 	if (!mainInteraction.isChatInputCommand()) return;
 	const command = mainInteraction.client.commands.get(mainInteraction.commandName);
 	if (!command) {
-		console.error(`[WARNING] No command matching ${mainInteraction.commandName} was found.`);
+    index.setTitle("Command in development").setDescription("This command is still work in progress.").setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+    await mainInteraction.reply({ content: [index], flags: MessageFlags.Ephemeral });
 		return;
 	}
 	try {
