@@ -35,13 +35,9 @@ for (const folder of commandFolders) {
   if (folder.length != 0) {
      
 	for (const file of commandFiles) {
-    console.log (folder, " => " , commandFiles, " => ", file);
 		const command = require(path.join(commandsPath, file));
-    console.log(command);
-    /*
-		if ('execute' in command) client.commands.set(command.data.name, command);
+		if ('execute' in command) client.commands.set(path.basename(file, path.extname(file)), command);
     else console.log(`[WARNING] The command at ${filePath} is missing a required "execute" property.`);
-    */
 	}
 
 } else console.log(`[WARNING] The command directory ${folder} is empty, skipping.`);
