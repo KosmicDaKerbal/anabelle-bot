@@ -18,9 +18,15 @@ module.exports = {
             restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.SUCCESS }).setColor(0x00ff00).setTitle("Restarting...").setDescription(`Bot restarts <t:${Math.floor(Date.now() / 1000) + 15}:R> from now.`).setTimestamp();
             await rstInteraction.update({ embeds: [restart] });
             }
+            setTimeout(() => {
+            interaction.client.user.setPresence({status: 'invisible'});
+            console.log('[INFO] Bot stopping on command.');
+            process.exit();
+        }, 15000);
         });
         collect.on("end", async () => {
-            restartConfirm.setDisabled(true);
+            restartConfirm.setDisabled(true).setStyle(ButtonStyle.Secondary);
+            restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.FAIL }).setColor(0xff0000).setTitle("Restart Abort").setDescription(`Bot restart cancelled.`).setTimestamp();
             await interaction.editReply({components: [component],});
         });
     }
