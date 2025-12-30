@@ -26,10 +26,9 @@ module.exports = {
         });
         
         collect.on("end", async () => {
-            restartConfirm.setDisabled(true).setStyle(ButtonStyle.Secondary);
             setTimeout(() => interaction.client.user.setPresence({status: 'idle'}), 25000);
             restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.FAIL }).setColor(0xff0000).setTitle("Restart Abort").setDescription(`Bot restart cancelled.`).setTimestamp();
-            await interaction.editReply({components: [component],});
+            await interaction.update({embeds: [restart], components: [],});
         });
     }
 }
