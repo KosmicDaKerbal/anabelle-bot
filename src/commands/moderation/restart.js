@@ -17,8 +17,8 @@ module.exports = {
                 await interaction.editReply({ embeds: [restart], components: [component], });
             restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.SUCCESS }).setColor(0x00ff00).setTitle("Restarting...").setDescription(`Bot restarts <t:${Math.floor(Date.now() / 1000) + 15}:R> from now.`).setTimestamp();
             await rstInteraction.update({ embeds: [restart] });
-            interaction.client.user.setPresence({status: 'dnd'});
             }
+            interaction.client.user.setPresence({status: 'dnd'});
             setTimeout(() => {
             console.log('[INFO] Bot stopping on command.');
             process.exit();
@@ -26,7 +26,7 @@ module.exports = {
         });
         collect.on("end", async () => {
             restartConfirm.setDisabled(true).setStyle(ButtonStyle.Secondary);
-            interaction.client.user.setPresence({status: 'idle'});
+            //interaction.client.user.setPresence({status: 'idle'});
             restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.FAIL }).setColor(0xff0000).setTitle("Restart Abort").setDescription(`Bot restart cancelled.`).setTimestamp();
             await interaction.editReply({components: [component],});
         });
