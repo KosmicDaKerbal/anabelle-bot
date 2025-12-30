@@ -38,10 +38,8 @@ for (const folder of commandFolders) {
 		if ('execute' in command) client.commands.set(path.basename(file, path.extname(file)), command);
     else console.log(`[WARNING] The command at ${filePath} is missing a required "execute" property.`);
 	}
-} else console.log(`[WARNING] The command directory ${folder} is empty, skipping.`);
- 
+ } else console.log(`[WARNING] The command directory ${folder} is empty, skipping.`);
 }
-
 client.on(Events.GuildMemberAdd, async member => {
     if(member.user.bot) {
         member.roles.add(await member.guild.roles.fetch(process.env.BOT_ROLE_ID));
@@ -52,6 +50,7 @@ client.on(Events.GuildMemberAdd, async member => {
 });
 
 client.on(Events.InteractionCreate, async (mainInteraction) => {
+  const index = new EmbedBuilder();
 	if (!mainInteraction.isChatInputCommand()) return;
 	const command = mainInteraction.client.commands.get(mainInteraction.commandName);
 	if (!command) {
@@ -60,19 +59,12 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
 	}
 	try {
 		await command.execute(mainInteraction);
+    const error = "test";
+    index.setTitle("Error executing command").setDescription((!process.env.MAINTANENCE_MODE) ? "There was an error executing the command" : `Log: \n\`\`\`${error}\n\`\`\``).setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+		if (mainInteraction.replied || mainInteraction.deferred) await mainInteraction.followUp({ embeds: [index], flags: MessageFlags.Ephemeral });
+	  else await mainInteraction.reply({ content: [index], flags: MessageFlags.Ephemeral });
 	} catch (error) {
-		console.error(error);
-		if (mainInteraction.replied || mainInteraction.deferred) {
-			await mainInteraction.followUp({
-				content: 'There was an error while executing this command!',
-				flags: MessageFlags.Ephemeral,
-			});
-		} else {
-			await mainInteraction.reply({
-				content: 'There was an error while executing this command!',
-				flags: MessageFlags.Ephemeral,
-			});
-		}
+    
 	}
 });
 
