@@ -1,0 +1,14 @@
+.numBox
+    {position:relative;}
+.num
+    {position:absolute; bottom:1; right:0;}
+body, html {
+  font-family: 'Trebuchet MS', sans-serif;
+}
+.container img {
+  vertical-align: middle;
+}
+.logo {
+    height: 100px;
+    width: auto;
+}

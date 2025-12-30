@@ -1,7 +1,7 @@
-const {EmbedBuilder} = require("discord.js");
+const {EmbedBuilder } = require("discord.js");
 const process = require("process");
 module.exports = {
-  send: async function (embed) {
+  async execute (interaction) {
     const help = new EmbedBuilder().setTitle("Help Section").setColor(0x8c3f7a).addFields(
       {
         name: "► General Commands:",
@@ -25,6 +25,6 @@ module.exports = {
       )
       .setFooter({ text: `v${process.env.BOT_VERSION}`, iconURL: process.env.ICON })
       .setTimestamp();
-    await embed.reply({ embeds: [help] });
+    await interaction.reply({ embeds: [help] });
   }
 }

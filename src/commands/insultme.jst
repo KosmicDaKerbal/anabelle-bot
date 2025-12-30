@@ -1,8 +1,9 @@
-const {EmbedBuilder} = require("discord.js");
+const {EmbedBuilder, SlashCommandBuilder} = require("discord.js");
 const https = require ("https");
 const insult = new EmbedBuilder().setTitle("An Insult for You").setColor(0x8c3f7a);
 module.exports = {
-  me: async function (embed) {
+  insultme: new SlashCommandBuilder().setName('insultme').setDescription("Generates an insult"),
+  async execute (embed) {
     await embed.deferReply();
     https.get(`https://evilinsult.com/generate_insult.php?lang=en&type=json`, (res) => {
         let data = "";
