@@ -33,13 +33,11 @@ for (const folder of commandFolders) {
 	const commandsPath = path.join(path.join(__dirname, 'commands'), folder);
 	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
   if (folder.length != 0) {
-     
 	for (const file of commandFiles) {
 		const command = require(path.join(commandsPath, file));
 		if ('execute' in command) client.commands.set(path.basename(file, path.extname(file)), command);
     else console.log(`[WARNING] The command at ${filePath} is missing a required "execute" property.`);
 	}
-
 } else console.log(`[WARNING] The command directory ${folder} is empty, skipping.`);
  
 }
@@ -55,7 +53,7 @@ client.on(Events.GuildMemberAdd, async member => {
 
 client.on(Events.InteractionCreate, async (mainInteraction) => {
 	if (!mainInteraction.isChatInputCommand()) return;
-	const command = mainInteraction.client.commands.get(interaction.commandName);
+	const command = mainInteraction.client.commands.get(mainInteraction.commandName);
 	if (!command) {
 		console.error(`No command matching ${mainInteraction.commandName} was found.`);
 		return;
