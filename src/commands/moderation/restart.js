@@ -1,32 +1,28 @@
 const process = require("process");
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, SlashCommandBuilder } = require("discord.js");
-const dayjs = require('dayjs');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, MessageFlags } = require("discord.js");
 module.exports = {
-        async execute (embed) {
-        const restart = new EmbedBuilder().setTitle("Confirm Bot Restart").setColor(0x8c3f7a).setAuthor({ name: `${process.env.BOT_NAME} Administration`, iconURL: process.env.PROCESSING }).setFooter({ text: `v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }).setTimestamp();
-        const restartConfirm = new ButtonBuilder().setCustomId("reconfirm").setLabel("Restart").setStyle(ButtonStyle.Danger).setDisabled(false);
+        async execute (interaction) {
+        const restart = new EmbedBuilder().setTitle("Confirm Bot Restart").setColor(0x8c3f7a).setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.PROCESSING }).setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+        const restartConfirm = new ButtonBuilder().setCustomId("restart").setLabel("Restart").setStyle(ButtonStyle.Danger).setDisabled(false);
         const component = new ActionRowBuilder().addComponents(restartConfirm);
-        const filter = (i) => i.user.id === embed.user.id;
-        const purgereply = await embed.reply({ embeds: [restart], components: [component] });
-        const collect = purgereply.createMessageComponentCollector({
+        const rstreply = await interaction.reply({ embeds: [restart], components: [component] });
+        const collect = rstreply.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            filter,
             time: 15_000,
           });
         collect.on("collect", async (rstInteraction) => {
-            if (rstInteraction.customId == 'reconfirm'){
+            if (rstInteraction.user.id != interaction.user.id) return rstInteraction.reply({embeds: [new EmbedBuilder().setTitle("This command is not for you!")], flags: MessageFlags.Ephemeral});
+            if (rstInteraction.customId == 'restart'){
                 restartConfirm.setDisabled(true).setStyle(ButtonStyle.Success);
-                await embed.editReply({ embeds: [restart], components: [component], });
-            const rstime = dayjs();
-            restart.setAuthor({ name: `${process.env.BOT_NAME} Administration`, iconURL: process.env.SUCCESS }).setColor(0x00ff00).setTitle("Restarting...").setDescription(`Bot restarts <t:${rstime.unix() + 15}:R> from now.`).setTimestamp();
-            await rstInteraction.reply({ embeds: [restart] });
+                await interaction.editReply({ embeds: [restart], components: [component], });
+            restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.SUCCESS }).setColor(0x00ff00).setTitle("Restarting...").setDescription(`Bot restarts <t:${Math.floor(Date.now() / 1000) + 15}:R> from now.`).setTimestamp();
+            await rstInteraction.update({ embeds: [restart] });
             return 1;
             }
         });
-        collect.on("end", async () => {
+        /*collect.on("end", async () => {
             restartConfirm.setDisabled(true);
-            await embed.editReply({components: [component],});
-        });
-        return 0;
+            await interaction.editReply({components: [component],});
+        });*/
     }
 }

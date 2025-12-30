@@ -23,8 +23,7 @@ module.exports = {
           inline: true,
         },
       )
-      .setFooter({ text: `v${process.env.BOT_VERSION}`, iconURL: process.env.ICON })
-      .setTimestamp();
+      .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
     await interaction.reply({ embeds: [help] });
   }
 }
