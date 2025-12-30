@@ -50,7 +50,8 @@ for (const folder of commandFolders) {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);
 		if ('execute' in command) {
-			client.commands.set(command.data.name, command);
+      console.log(command.data);
+			//client.commands.set(command.data.name, command);
 		} else {
 			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 		}
