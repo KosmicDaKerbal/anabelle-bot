@@ -43,6 +43,8 @@ client.commands = new Collection();
 
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
+console.log (commandFolders);
+/*
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
 	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
@@ -57,7 +59,7 @@ for (const folder of commandFolders) {
 		}
 	}
 }
-
+*/
 client.on(Events.GuildMemberAdd, async member => {
     if(member.user.bot) {
         member.roles.add(await member.guild.roles.fetch(process.env.BOT_ROLE_ID));
