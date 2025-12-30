@@ -25,7 +25,6 @@ module.exports = {
       )
       .setFooter({ text: `v${process.env.BOT_VERSION}`, iconURL: process.env.ICON })
       .setTimestamp();
-      console.log(interaction);
-    //await interaction.reply({ embeds: [help] });
+    await interaction.reply({ embeds: [help] });
   }
 }
