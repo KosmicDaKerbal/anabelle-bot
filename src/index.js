@@ -43,11 +43,11 @@ client.commands = new Collection();
 
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
-console.log (commandFolders);
-/*
+
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
 	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
+  /*
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);
@@ -58,8 +58,10 @@ for (const folder of commandFolders) {
 			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 		}
 	}
+    */
+   console.log (folder, " => " ,commandFiles);
 }
-*/
+
 client.on(Events.GuildMemberAdd, async member => {
     if(member.user.bot) {
         member.roles.add(await member.guild.roles.fetch(process.env.BOT_ROLE_ID));
