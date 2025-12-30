@@ -17,12 +17,11 @@ module.exports = {
                 await interaction.editReply({ embeds: [restart], components: [component], });
             restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.SUCCESS }).setColor(0x00ff00).setTitle("Restarting...").setDescription(`Bot restarts <t:${Math.floor(Date.now() / 1000) + 15}:R> from now.`).setTimestamp();
             await rstInteraction.update({ embeds: [restart] });
-            return 1;
             }
         });
-        /*collect.on("end", async () => {
+        collect.on("end", async () => {
             restartConfirm.setDisabled(true);
             await interaction.editReply({components: [component],});
-        });*/
+        });
     }
 }
