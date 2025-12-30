@@ -11,7 +11,10 @@ module.exports = {
             time: 25_000,
           });
         collect.on("collect", async (rstInteraction) => {
-            if (rstInteraction.user.id != interaction.user.id) return rstInteraction.reply({embeds: [new EmbedBuilder().setTitle("This command is not for you!")], flags: MessageFlags.Ephemeral});
+            //if (rstInteraction.user.id != interaction.user.id) return rstInteraction.reply({embeds: [new EmbedBuilder().setTitle("This command is not for you!")], flags: MessageFlags.Ephemeral});
+            //REPLACE v with ^ when DB implemented
+            if (rstInteraction.user.id != '898957399677878332') return rstInteraction.reply({embeds: [new EmbedBuilder().setTitle("This command is not for you!")], flags: MessageFlags.Ephemeral});
+
             if (rstInteraction.customId == 'restart'){
                 restartConfirm.setDisabled(true).setStyle(ButtonStyle.Success);
                 await interaction.editReply({ embeds: [restart], components: [component], });
