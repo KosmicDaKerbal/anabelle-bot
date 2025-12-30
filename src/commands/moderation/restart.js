@@ -8,7 +8,7 @@ module.exports = {
         const rstreply = await interaction.reply({ embeds: [restart], components: [component] });
         const collect = rstreply.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: 15_000,
+            time: 25_000,
           });
         collect.on("collect", async (rstInteraction) => {
             if (rstInteraction.user.id != interaction.user.id) return rstInteraction.reply({embeds: [new EmbedBuilder().setTitle("This command is not for you!")], flags: MessageFlags.Ephemeral});
