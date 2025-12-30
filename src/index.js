@@ -36,8 +36,9 @@ for (const folder of commandFolders) {
      
 	for (const file of commandFiles) {
     console.log (folder, " => " , commandFiles, " => ", file);
-    /*
 		const command = require(path.join(commandsPath, file));
+    console.log(command);
+    /*
 		if ('execute' in command) client.commands.set(command.data.name, command);
     else console.log(`[WARNING] The command at ${filePath} is missing a required "execute" property.`);
     */
