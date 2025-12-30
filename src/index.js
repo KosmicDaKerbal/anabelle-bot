@@ -3,7 +3,6 @@ const { Client, Collection, GatewayIntentBits, IntentsBitField, EmbedBuilder, Ac
 const { Captcha } = require("discord.js-captcha");
 const fs = require("fs");
 const path = require ("path");
-
 const client = new Client({
     intents: [
       IntentsBitField.Flags.Guilds,
@@ -28,38 +27,18 @@ const client = new Client({
     customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage(process.env.CAPTCHA_SUCCESS).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
     customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage(process.env.CAPTCHA_FAIL).setFooter({ text: `${process.env.BOT_NAME} v${process.env.BOT_VERSION}`, iconURL: process.env.ICON }),
 });
-/*
-const help = require('./commands/help');
-const insult = require('./commands/insultme');
-const restart = require('./commands/restart');
-const slowmode = require("./commands/slowmode");
-const lock = require("./commands/lock");
-const unlock = require("./commands/unlock");
-*/
-
-  const index = new EmbedBuilder();
-  var rbt;
 client.commands = new Collection();
-
-const foldersPath = path.join(__dirname, 'commands');
-const commandFolders = fs.readdirSync(foldersPath);
-
+const commandFolders = fs.readdirSync(path.join(__dirname, 'commands'));
 for (const folder of commandFolders) {
-	const commandsPath = path.join(foldersPath, folder);
+	const commandsPath = path.join(path.join(__dirname, 'commands'), folder);
 	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
-  /*
-	for (const file of commandFiles) {
-		const filePath = path.join(commandsPath, file);
-		const command = require(filePath);
-		if ('execute' in command) {
-      console.log(command.data);
-			//client.commands.set(command.data.name, command);
-		} else {
-			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
-		}
-	}
-    */
-   console.log (folder, " => " ,commandFiles);
+  if (folder.length != 0) {
+	  for (const file of commandFiles) {
+	  	const command = require(path.join(commandsPath, file));
+	  	if ('execute' in command) client.commands.set(command.data.name, command);
+      else console.log(`[WARNING] The command at ${filePath} is missing a required "execute" property.`);
+	  }
+  } else console.log(`[INFO] The command directory ${folder} is empty, skipping.`);
 }
 
 client.on(Events.GuildMemberAdd, async member => {
