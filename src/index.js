@@ -60,9 +60,9 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
     client.user.setPresence({
       activities: [
       {
-        type: ActivityType.Custom,
-        name: "custom",
-        state: (process.env.MAINTANENCE_MODE === "0") ? "u/mi_tatyavinchoo's secret admirer" : "--MAINTANENCE MODE--"
+        type: (process.env.MAINTANENCE_MODE === "0") ? ActivityType.Watching : ActivityType.Custom,
+        name: "you",
+        state: "--MAINTANENCE MODE--"
       }
     ],
       status: 'idle'
