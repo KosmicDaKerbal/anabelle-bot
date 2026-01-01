@@ -9,7 +9,7 @@ module.exports = {
   async execute (interaction) {
     const commandsList = [];
     for (const command of interaction.client.commands)commandsList.push ({"name": `"/${command[1].data.name}"`, "value": `"${command[1].data.description}"`});
-    const help = new EmbedBuilder().setTitle("Help Section").setColor(0x8c3f7a).addFields(JSON.stringify(commandsList)).setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+    const help = new EmbedBuilder().setTitle("Help Section").setColor(0x8c3f7a).addFields(JSON.parse(JSON.stringify(commandsList))).setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
     await interaction.reply({ embeds: [help] });
   }
 }
