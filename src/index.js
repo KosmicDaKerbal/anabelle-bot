@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Client, Collection, GatewayIntentBits, IntentsBitField, EmbedBuilder, ActivityType, Events, MessageFlags } = require("discord.js");
-const { Captcha } = require("discord.js-captcha");
+const sqlite3 = require ('better-sqlite3');
 const fs = require("fs");
 const path = require ("path");
 const client = new Client({
