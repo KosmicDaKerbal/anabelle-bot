@@ -62,7 +62,7 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
       {
         type: (process.env.MAINTANENCE_MODE === "0") ? ActivityType.Watching : ActivityType.Custom,
         name: "you",
-        state: (process.env.MAINTANENCE_MODE === "0") ? "I'm watching you." : "--MAINTANENCE MODE--"
+        state: (process.env.MAINTANENCE_MODE === "0") ? "Ị̵̀'̴̩͑ḿ̵̥ ̴͓̍ẘ̷̟à̸̰t̸̬͠ċ̶̫h̶̫̕i̷̛̠n̶̘̏g̶͎̍ ̷̪͋y̶̬̽ơ̵̙ŭ̴̻.̴̣̉" : "--MAINTANENCE MODE--"
       }
     ],
       status: 'idle'
