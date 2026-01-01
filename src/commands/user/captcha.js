@@ -4,10 +4,9 @@ module.exports = {
   data: new SlashCommandBuilder().setName('captcha').setDescription("Generates a new Captcha for Human verification."),
   async execute (interaction, objectTypeCode) {
     const captchaEmbed = new EmbedBuilder().setTitle("Captcha verification process started. Check your DM's.").setDescription(`If your DM's are closed, check the verification channel. If that doesn't work, please open your DM's temporarily.`);
-    console.log((interaction.member.roles.cache.some(role => role.name === 'Verified')));
     const captchaCommand = new Captcha(interaction.client, {
-    roleID: (!objectTypeCode) ? (interaction.member.roles.cache.some(role => role.name === 'Verified')).id : (interaction.roles.cache.some(role => role.name === 'Verified')).id,
-    channelID: (interaction.guild.channels.cache.some(channel => channel.name === 'Verification')).id,
+    roleID: (!objectTypeCode) ? (interaction.member.roles.cache.find(role => role.name === 'Verified')).id : (interaction.roles.cache.find(role => role.name === 'Verified')).id,
+    channelID: (interaction.guild.channels.cache.find(channel => channel.name === 'Verification')).id,
     sendToTextChannel: false,
     addRoleOnSuccess: true,
     kickOnFailure: false,
