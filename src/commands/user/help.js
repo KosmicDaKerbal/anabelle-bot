@@ -1,7 +1,7 @@
 const {EmbedBuilder, SlashCommandBuilder} = require("discord.js");
 const process = require("process");
 module.exports = {
-  data: new SlashCommandBuilder().setName('help').setDescription("Complete commands list for the bot"),
+  data: new SlashCommandBuilder().setName('help').setDescription("Complete commands list for the bot."),
   async execute (interaction) {
     const commandsList = [];
     for (const command of interaction.client.commands)commandsList.push ({"name": `\`/${command[1].data.name}\``, "value": command[1].data.description});
