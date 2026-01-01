@@ -5,7 +5,7 @@ module.exports = {
   async execute (interaction, objectTypeCode) {
     const captchaEmbed = new EmbedBuilder().setTitle("Captcha verification process started. Check your DM's.").setDescription(`If your DM's are closed, check the verification channel. If that doesn't work, please open your DM's temporarily.`);
     const captchaCommand = new Captcha(interaction.client, {
-    roleID: (!objectTypeCode) ? (interaction.member.guild.roles.cache.find(role => role.name === 'Verified')).id : (interaction.guild.roles.cache.find(role => role.name === 'Verified')).id,
+    roleID: (interaction.guild.roles.cache.find(role => role.name === 'Verified')).id,
     channelID: (interaction.guild.channels.cache.find(channel => channel.name === 'verification')).id,
     sendToTextChannel: false,
     addRoleOnSuccess: true,
