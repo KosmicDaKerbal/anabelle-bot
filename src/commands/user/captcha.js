@@ -1,7 +1,7 @@
 const {EmbedBuilder, MessageFlags, SlashCommandBuilder} = require("discord.js");
 const { Captcha } = require("discord.js-captcha");
 module.exports = {
-  data: new SlashCommandBuilder().setName('captcha').setDescription("Generates a new Captcha for Human verification."),
+  data: new SlashCommandBuilder().setName('captcha').setDescription("Generates a new captcha for human verification."),
   async execute (interaction, objectTypeCode) {
     const captchaEmbed = new EmbedBuilder().setTitle("Captcha verification process started. Check your DM's.").setDescription(`If your DM's are closed, check the verification channel. If that doesn't work, please open your DM's temporarily.`);
     const captchaCommand = new Captcha(interaction.client, {

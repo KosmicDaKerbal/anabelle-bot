@@ -1,7 +1,7 @@
 const process = require("process");
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, MessageFlags, SlashCommandBuilder } = require("discord.js");
 module.exports = {
-        data: new SlashCommandBuilder().setName('restart').setDescription("Admin Command: restarts the bot"),
+        data: new SlashCommandBuilder().setName('restart').setDescription("**Admin Command**: restarts the bot"),
         async execute (interaction) {
         const restart = new EmbedBuilder().setTitle("Confirm Bot Restart").setColor(0x8c3f7a).setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.PROCESSING }).setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
         const restartConfirm = new ButtonBuilder().setCustomId("restart").setLabel("Restart").setStyle(ButtonStyle.Danger).setDisabled(false);
