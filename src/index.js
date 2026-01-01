@@ -13,20 +13,6 @@ const client = new Client({
       GatewayIntentBits.Guilds,
     ],
   });
-  const captcha = new Captcha(client, {
-    roleID: process.env.VERIFIED_ROLE_ID,
-    channelID: process.env.CAPTCHA_CHANNEL_ID,
-    sendToTextChannel: false,
-    addRoleOnSuccess: true,
-    kickOnFailure: false,
-    caseSensitive: true,
-    attempts: 3,
-    timeout: 600000,
-    showAttemptCount: true,
-    customPromptEmbed: new EmbedBuilder().setTitle("w̶̼̃ḣ̷̬a̶̞̽t̸͉̓ ̷͈͌i̴̘͝s̵̪̈ ̷̡̿ẗ̴̺ẖ̵̇î̷̞s̷̼̑?̷̼͛"),
-    customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage(process.env.CAPTCHA_SUCCESS).setFooter({ text: 'Anabelle'}).setTimestamp(),
-    customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage(process.env.CAPTCHA_FAIL).setFooter({ text: 'Anabelle'}).setTimestamp(),
-});
 client.commands = new Collection();
 const commandFolders = fs.readdirSync(path.join(__dirname, 'commands'));
 for (const folder of commandFolders) {
@@ -41,12 +27,12 @@ for (const folder of commandFolders) {
  } else console.log(`[INFO] The command directory ${folder} is empty, skipping.`);
 }
 client.on(Events.GuildMemberAdd, async member => {
-    if(member.user.bot) {
+  if(member.user.bot) {
         member.roles.add(await member.guild.roles.fetch(process.env.BOT_ROLE_ID));
         return;
     };
-    member.roles.add(await member.guild.roles.fetch(process.env.UNVERIFIED_ROLE_ID));
-    captcha.present(member);
+    if(!member.roles.cache.some(role => role.name === 'UNVERIFIED')) member.roles.add(member.guild.roles.cache.find(role => role.name === 'UNVERIFIED'));
+    client.commands.get('captcha').execute(member, 1); // Arg 1 => Member object passed, Arg 0 => Interaction Object Passed
 });
 
 client.on(Events.InteractionCreate, async (mainInteraction) => {
@@ -60,7 +46,7 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
 	}
 	try {
     client.user.setPresence({status: 'online'});
-		await command.execute(mainInteraction);
+		await command.execute(mainInteraction, 0);
     if (mainInteraction.commandName != 'restart') setTimeout(() => client.user.setPresence({status: 'idle'}), 5000);
 	} catch (error) {
     index.setTitle("Error executing command").setDescription((process.env.MAINTANENCE_MODE === '0') ? "There was an error executing the command" : `Log: \n\`\`\`${error}\n\`\`\``).setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
@@ -141,58 +127,7 @@ client.on(Events.InteractionCreate , async (mainInteraction) => {
 });
 */
   
-const vindex = new EmbedBuilder();
-captcha.on("success", async data => {
-  const vchannel = await client.channels.fetch(process.env.GCHAT_ID);
-  console.log(`${data.member.user.username} has solved a CAPTCHA.`);
-  vindex.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`).setDescription(null);
-  await vchannel.send({ embeds: [vindex]});
-  data.member.roles.remove(process.env.UNVERIFIED_ROLE_ID);
-});
-captcha.on("failure", async data => {
-    const guild = await client.guilds.fetch(process.env.GUILD_ID);
-    console.log(`CAPTCHA for ${data.member.user.username} answered incorrectly`);
-    try {
-        await guild.members.fetch(data.member.user.id)
-        .then((member) => {
-          if (!member){
-            console.log(`${data.member.user.username} has left the server.`);
-            } else {
-            console.log(`CAPTCHA fail message for ${data.member.user.username} sent`);
-            vindex.setTitle(`Captcha Fail`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
-            client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
-            console.log(`${data.member.user.username} does not allow DM's from bots.`);
-            });
-          }
-        }).catch ((err) => {
-          console.log(`${data.member.user.username} has left the server.`);
-        });
-    } catch (e){
-      console.log(`${data.member.user.username} has left the server.`);
-      }
-});
-captcha.on("timeout", async data => {
-    const guild = await client.guilds.fetch(process.env.GUILD_ID);
-    console.log(`CAPTCHA for ${data.member.user.username} timed out`);
-    try {
-        await guild.members.fetch(data.member.user.id)
-        .then((member) => {
-          if (!member){
-            console.log(`${data.member.user.username} has left the server.`);
-            } else {
-            console.log(`CAPTCHA timeout message for ${data.member.user.username} sent`);
-            vindex.setTitle(`Captcha timed out`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
-            client.users.send(data.member.user.id, { embeds: [vindex] }).catch((err)=>{
-            console.log(`${data.member.user.username} does not allow DM's from bots.`);
-            });
-          }
-        }).catch ((err) => {
-          console.log(`${data.member.user.username} has left the server.`);
-        });
-    } catch (e){
-      console.log(`${data.member.user.username} has left the server.`);
-      }
-});
+
   console.log("Connecting...");
   client.once(Events.ClientReady, async (c) => {
     console.log("Anabelle is runnning");
