@@ -8,8 +8,7 @@ module.exports = {
   data: new SlashCommandBuilder().setName('help').setDescription("Complete commands list for the bot"),
   async execute (interaction) {
     const commandsList = [];
-    for (const command of interaction.client.commands){ //commandsList.push ({"name": `"/${command.data.name}"`, "value": `"${command.data.description}"`});
-  console.log (command[1].data.name)}
+    for (const command of interaction.client.commands)commandsList.push ({"name": `"/${command[1].data.name}"`, "value": `"${command[1].data.description}"`});
     const help = new EmbedBuilder().setTitle("Help Section").setColor(0x8c3f7a).addFields(JSON.stringify(commandsList)).setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
     await interaction.reply({ embeds: [help] });
   }
