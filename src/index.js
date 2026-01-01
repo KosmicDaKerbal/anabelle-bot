@@ -35,10 +35,10 @@ for (const folder of commandFolders) {
   if (folder.length != 0) {
 	for (const file of commandFiles) {
 		const command = require(path.join(commandsPath, file));
-		if ('execute' in command) client.commands.set(path.basename(file, path.extname(file)), command);
-    else console.log(`[WARNING] The command at ${filePath} is missing a required "execute" property.`);
+		if ('data' in command && 'execute' in command) client.commands.set(path.basename(file, path.extname(file)), command);
+    else console.warn(`[WARNING] The command at ${filePath} is missing a required "execute" or "data" property.`);
 	}
- } else console.log(`[WARNING] The command directory ${folder} is empty, skipping.`);
+ } else console.log(`[INFO] The command directory ${folder} is empty, skipping.`);
 }
 client.on(Events.GuildMemberAdd, async member => {
     if(member.user.bot) {

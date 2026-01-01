@@ -1,83 +1,26 @@
 require('dotenv').config();
-const { REST, Routes, ApplicationCommandOptionType } = require('discord.js');
-
-const commands = [
-    {
-        name: 'help',
-        description: 'Complete Commands List for the Bot.',
-    },
-    {
-        name: 'captcha',
-        description: 'Restart verification for Server.',
-    },
-    {
-        name: 'slowmode',
-        description: "Set a Slowmode: Admin Command",
-        options: [
-            {
-                name: 'duration',
-                description: 'Time in Seconds',
-                type: ApplicationCommandOptionType.Integer,
-                required: true,
-                min_value: 1,
-                max_value: 360,
-            },
-        ],
-    },
-    {
-        name: 'lock',
-        description: "Lock a channel: Admin Command",
-        options: [
-            {
-                name: 'lock-channel-name',
-                description: 'Name of the channel',
-                type: ApplicationCommandOptionType.Channel,
-                required: true,
-            },
-            /*{
-                name: 'duration',
-                description: 'Duration in seconds',
-                type: ApplicationCommandOptionType.Integer,
-                required: false,
-                min_value: 1,
-                max_value: 86400
-            },*/
-        ],
-    },
-    {
-        name: 'unlock',
-        description: "Unlock a channel: Admin Command",
-        options: [
-            {
-                name: 'unlock-channel-name',
-                description: 'Name of the channel',
-                type: ApplicationCommandOptionType.Channel,
-                required: true,
-            },
-            /*{
-                name: 'duration',
-                description: 'Duration in seconds',
-                type: ApplicationCommandOptionType.Integer,
-                required: false,
-                min_value: 1,
-                max_value: 86400
-            },*/
-        ],
-    },
-    {
-        name: 'restart',
-        description: 'Restarts the Bot: Admin Command',
-    },
-    {
-        name: 'insultme',
-        description: `You're quite the masochist huh`,
-    },
-];
+const { REST, Routes } = require('discord.js');
+const fs = require("fs");
+const path = require ("path");
+const commandsList = [];
+const commandFolders = fs.readdirSync(path.join(__dirname, 'commands'));
+for (const folder of commandFolders) {
+	const commandsPath = path.join(path.join(__dirname, 'commands'), folder);
+	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
+    if (folder.length != 0) {
+	    for (const file of commandFiles) {
+	    	const filePath = path.join(commandsPath, file);
+	    	const command = require(filePath);
+	    	if ('data' in command && 'execute' in command) commandsList.push(command.data.toJSON());
+            else console.warn(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+	    }
+    } else console.log(`[INFO] The command directory ${folder} is empty, skipping.`);
+}
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 (async () => {
     try {
         console.log('Registering Slash Commands...');
-        await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands });
+        await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commandsList });
         console.log('Slash Commands Registration Successful.');
     } catch (error) {
         console.log(`Error: ${error}`);
