@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "git pull https://github.com/KosmicDaKerbal/anabelle-bot.git && npm i && node ."
+    "refresh": "node --env-file=.env src/slashRegister.js"
   },
   "keywords": [],
   "author": "",
