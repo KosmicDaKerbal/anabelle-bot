@@ -12,7 +12,7 @@ module.exports = {
     switch (interaction.options.getSubcommand()){
         case 'setup':
             configEmbed.setTitle('Opening bot configuration interface...');
-            interaction.client.db.exec(`INSERT INTO config(guildID) VALUES(${interaction.guildID}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guildID}`);
+            interaction.client.db.exec(`INSERT INTO config(guildID) VALUES(${interaction.guild.id}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
             const configModal = new ModalBuilder().setCustomId('config').setTitle('Server Configuration for Anabelle');
             const verifiedRoleSelect = new RoleSelectMenuBuilder.setCustomId('vRole').setPlaceholder('Select a role').setMaxValues(1);
             const unverifiedRoleSelect = new RoleSelectMenuBuilder.setCustomId('uvRole').setPlaceholder('Select a role').setMaxValues(1);
