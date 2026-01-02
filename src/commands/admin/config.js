@@ -1,4 +1,4 @@
-const {LabelBuilder, EmbedBuilder, SlashCommandBuilder, MessageFlags, ModalBuilder, RoleSelectMenuBuilder, ChannelSelectMenuBuilder, UserSelectMenuBuilder} = require("discord.js");
+const {LabelBuilder, EmbedBuilder, SlashCommandBuilder, MessageFlags, ModalBuilder, RoleSelectMenuBuilder, ChannelSelectMenuBuilder, UserSelectMenuBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType} = require("discord.js");
 const process = require("process");
 module.exports = {
   data: new SlashCommandBuilder().setName('config').setDescription("**Admin Command**: Open Configuration Menu")
@@ -9,10 +9,18 @@ module.exports = {
   .addSubcommand((subcommand) => subcommand.setName('edit').setDescription('**Admin Command**: Edit the bot configuration'))
   .addSubcommand((subcommand) => subcommand.setName('delete').setDescription('**Admin Command**: Remove all configurations')),
   async execute (interaction) {
-    const configEmbed = new EmbedBuilder().setTitle('Opening bot configuration interface...');
+    const configEmbed = new EmbedBuilder().setTitle('Anabelle Server Configuration: ', interaction.options.getSubcommand());
     interaction.client.db.exec(`INSERT INTO config(guildID) VALUES(${interaction.guild.id}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
-    switch (interaction.options.getSubcommand()){
-        case 'roles':       
+    const openSettingsForm = new ButtonBuilder().setCustomId(interaction.options.getSubcommand(), 'Button').setLabel('Open Setup').setStyle(ButtonStyle.Link).setDisabled(false);
+    const buttonRow = new ActionRowBuilder().addComponents(openSettingsForm);
+    const replyEmbed = await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral, components: buttonRow});
+    const configCollector = replyEmbed.createMessageComponentCollector({
+        ComponentType: ComponentType.Button,
+        time: 30_000,
+    });
+    configCollector.on("collect", async(rolesForm) => {
+        switch (rolesForm.customId){
+        case 'rolesButton':
             const configRolesModal = new ModalBuilder().setCustomId('configRoles').setTitle('Server Roles Configuration for Anabelle');
             const verifiedRoleSelect = new RoleSelectMenuBuilder().setCustomId('vRole').setPlaceholder('Select a role').setMaxValues(1);
             const unverifiedRoleSelect = new RoleSelectMenuBuilder().setCustomId('uvRole').setPlaceholder('Select a role').setMaxValues(1);
@@ -21,10 +29,8 @@ module.exports = {
             const unverifiedRole = new LabelBuilder().setLabel("Select the server's unverified role").setDescription('This role will be given to new members have not yet solved a CAPTCHA').setRoleSelectMenuComponent(unverifiedRoleSelect);
             const botsRole = new LabelBuilder().setLabel("Select the server's bots role").setDescription('This role will be given to newly added bots. No CAPTCHA will be asked to them.').setRoleSelectMenuComponent(botsRoleSelect);
             configRolesModal.addLabelComponents(verifiedRole, unverifiedRole, botsRole);
-            await interaction.showModal(configRolesModal);
-            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             break;
-        case 'mod-team':
+        case 'mod-teamButton':
             const configModsModal = new ModalBuilder().setCustomId('configMods').setTitle('Server Mod Team Configuration for Anabelle');
             const juniorModRoleSelect = new RoleSelectMenuBuilder().setCustomId('jmRole').setPlaceholder('Select a role').setMaxValues(2);
             const seniorModRoleSelect = new RoleSelectMenuBuilder().setCustomId('smRole').setPlaceholder('Select a role').setMaxValues(2);
@@ -36,9 +42,8 @@ module.exports = {
             const owner = new LabelBuilder().setLabel("Select the server's owner").setDescription("Select the server's owner").setUserSelectMenuComponent(ownerSelect);
             configModsModal.addLabelComponents(juniorModRole, seniorModRole, adminRole, owner);
             await interaction.showModal(configModsModal);
-            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             break;
-        case 'channels':
+        case 'channelsButton':
             const configChannelsModal = new ModalBuilder().setCustomId('configChannels').setTitle('Server Channels Configuration for Anabelle');
             const logChannelSelect = new ChannelSelectMenuBuilder().setCustomId('lChannel').setPlaceholder('Select a channel').setMaxValues(1);
             const verificationChannelSelect = new ChannelSelectMenuBuilder().setCustomId('vChannel').setPlaceholder('Select a channel').setMaxValues(1);
@@ -48,8 +53,11 @@ module.exports = {
             const welcomeChannel = new LabelBuilder().setLabel("Select the bot's welcome channel").setDescription('Select a channel where the bot can send user welcome messages.').setChannelSelectMenuComponent(welcomeChannelSelect);
             configChannelsModal.addLabelComponents(verificationChannel, logChannel, welcomeChannel);
             await interaction.showModal(configChannelsModal);
-            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             break;
-    }
+        }
+    });
+    configCollector.on("end", async () => {
+        await interaction.editReply({embeds: [configEmbed], components: [],});
+    });
   }
 }
