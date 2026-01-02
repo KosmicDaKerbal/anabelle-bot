@@ -33,7 +33,7 @@ module.exports = {
             const juniorModRole = new LabelBuilder().setLabel("Select the server's junior mod role(s)").setDescription('Select up to 2 roles for temporary admins, trial mods etc.').setRoleSelectMenuComponent(juniorModRoleSelect);
             const seniorModRole = new LabelBuilder().setLabel("Select the server's senior mod role(s)").setDescription('Select up to 2 roles for permanent moderators').setRoleSelectMenuComponent(seniorModRoleSelect);
             const adminRole = new LabelBuilder().setLabel("Select the server's administrator role(s)").setDescription('Select up to 2 roles for administrators of the server').setRoleSelectMenuComponent(adminRoleSelect);
-            const owner = new LabelBuilder().setLabel("Select the server's owner").setDescription("Select the server's owner").seUserSelectMenuComponent(ownerSelect);
+            const owner = new LabelBuilder().setLabel("Select the server's owner").setDescription("Select the server's owner").setUserSelectMenuComponent(ownerSelect);
             configModal.addLabelComponents(verifiedRole, unverifiedRole, botsRole, verificationChannel, logChannel, welcomeChannel, juniorModRole, seniorModRole, adminRole, owner);
             await interaction.showModal(configModal);
             interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
