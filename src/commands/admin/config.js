@@ -6,7 +6,7 @@ const dbOptions = {
   timeout: 5000,
   verbose: console.log
 };
-const db = require('better-sqlite3')('../../serverConfig.db', dbOptions);
+const db = require('better-sqlite3')(`${__dirname}/../../serverConfig.db`, dbOptions);
 db.pragma('journal_mode = WAL');
 module.exports = {
   data: new SlashCommandBuilder().setName('config').setDescription("**Admin Command**: Open Configuration Menu")
