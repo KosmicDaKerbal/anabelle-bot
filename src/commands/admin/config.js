@@ -9,10 +9,9 @@ module.exports = {
   .addSubcommand((subcommand) => subcommand.setName('edit').setDescription('**Admin Command**: Edit the bot configuration'))
   .addSubcommand((subcommand) => subcommand.setName('delete').setDescription('**Admin Command**: Remove all configurations')),
   async execute (interaction) {
-    console.log(interaction.options.getSubcommand());
-    const configEmbed = new EmbedBuilder().setTitle('Anabelle Server Configuration: ', interaction.options.getSubcommand());
+    const configEmbed = new EmbedBuilder().setTitle('Anabelle Server Configuration: ' + interaction.options.getSubcommand());
     interaction.client.db.exec(`INSERT INTO config(guildID) VALUES(${interaction.guild.id}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
-    const openSettingsForm = new ButtonBuilder().setCustomId(interaction.options.getSubcommand(), 'Button').setLabel('Open Setup').setStyle(ButtonStyle.Primary).setDisabled(false);
+    const openSettingsForm = new ButtonBuilder().setCustomId(interaction.options.getSubcommand() + 'Button').setLabel('Open Setup').setStyle(ButtonStyle.Primary).setDisabled(false);
     const buttonRow = new ActionRowBuilder().addComponents(openSettingsForm);
     const replyEmbed = await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral, components: [buttonRow]});
     const configCollector = replyEmbed.createMessageComponentCollector({
