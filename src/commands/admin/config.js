@@ -22,7 +22,7 @@ module.exports = {
             const unverifiedRole = new LabelBuilder().setLabel("Select the server's unverified role").setDescription('This role will be given to new members have not yet solved a CAPTCHA').setRoleSelectMenuComponent(unverifiedRoleSelect);
             const botsRole = new LabelBuilder().setLabel("Select the server's bots role").setDescription('This role will be given to newly added bots. No CAPTCHA will be asked to them.').setRoleSelectMenuComponent(botsRoleSelect);
             configRolesModal.addLabelComponents(verifiedRole, unverifiedRole, botsRole);
-            //interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
+            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             await interaction.showModal(configRolesModal);
             break;
         case 'mod-team':
@@ -36,7 +36,7 @@ module.exports = {
             const adminRole = new LabelBuilder().setLabel("Select the server's administrator role(s)").setDescription('Select up to 2 roles for administrators of the server').setRoleSelectMenuComponent(adminRoleSelect);
             const owner = new LabelBuilder().setLabel("Select the server's owner").setDescription("Select the server's owner").setUserSelectMenuComponent(ownerSelect);
             configModsModal.addLabelComponents(juniorModRole, seniorModRole, adminRole, owner);
-            //await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
+            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             await interaction.showModal(configModsModal);
             break;
         case 'channels':
@@ -48,7 +48,7 @@ module.exports = {
             const logChannel = new LabelBuilder().setLabel("Select the bot's logging channel").setDescription('Select a channel where the bot can send actions log.').setChannelSelectMenuComponent(logChannelSelect);
             const welcomeChannel = new LabelBuilder().setLabel("Select the bot's welcome channel").setDescription('Select a channel where the bot can send user welcome messages.').setChannelSelectMenuComponent(welcomeChannelSelect);
             configChannelsModal.addLabelComponents(verificationChannel, logChannel, welcomeChannel);
-            //await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
+            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             await interaction.showModal(configChannelsModal);
             break;
     }
