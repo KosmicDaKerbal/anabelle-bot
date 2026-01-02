@@ -15,9 +15,6 @@ module.exports = {
     timeout: 600000,
     showAttemptCount: true,
     customPromptEmbed: new EmbedBuilder().setTitle("w̶̼̃ḣ̷̬a̶̞̽t̸͉̓ ̷͈͌i̴̘͝s̵̪̈ ̷̡̿ẗ̴̺ẖ̵̇î̷̞s̷̼̑?̷̼͛").setDescription(`Captcha for <@${(!objectTypeCode) ? interaction.user.id : interaction.id}>`)
-    ,
-    customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage(process.env.CAPTCHA_SUCCESS).setFooter({ text: 'Captcha verification complete'}).setTimestamp(),
-    customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage(process.env.CAPTCHA_FAIL).setFooter({ text: 'Captcha verification failed'}).setTimestamp(),
     });
     if (!objectTypeCode && interaction.member.roles.cache.some(role => role.name === 'Verified')) captchaEmbed.setTitle("User already verified").setDescription("You have texting permissions on the server.").setColor(0x00ff00);
     else {
@@ -30,6 +27,24 @@ module.exports = {
     if (!objectTypeCode) await interaction.reply({ embeds: [captchaEmbed], flags: MessageFlags.Ephemeral });
     const guild = await interaction.client.guilds.fetch(process.env.GUILD_ID);
     captchaCommand.on("success", async data => {
+      try {
+            await guild.members.cache.get(data.member.user.id)
+            .then((member) => {
+              if (!member){
+                console.log(`${data.member.user.username} has left the server.`);
+                } else {
+                console.log(`CAPTCHA success message for ${data.member.user.username} sent`);
+                captchaEmbed.setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage(process.env.CAPTCHA_SUCCESS).setFooter({ text: 'Captcha verification complete'}).setTimestamp();
+                interaction.client.users.send(data.member.user.id, { embeds: [captchaEmbed] }).catch((e1)=>{
+                console.log(`${data.member.user.username} does not allow DM's from bots.`);
+                });
+              }
+            }).catch ((e1) => {
+              console.log(`${data.member.user.username} has left the server.`);
+            });
+        } catch (e2){
+          console.log(`${data.member.user.username} has left the server.`);
+          }
       const vchannel = await interaction.client.channels.fetch(process.env.GCHAT_ID);
       console.log(`${data.member.user.username} has solved a CAPTCHA.`);
       captchaEmbed.setTitle(`${data.member.user.username} i̶͝ͅs̴̹̚ ̸̘́h̶͚͗e̵̛̼r̸͈͛ë̷̫́ ̴͎̿t̷̙̓o̸̜̐ ̷̺̀p̵̜͗l̴̮̓a̸̬͗y̸̬̆`).setDescription(null);
@@ -39,42 +54,42 @@ module.exports = {
     captchaCommand.on("failure", async data => {
         console.log(`CAPTCHA for ${data.member.user.username} answered incorrectly`);
         try {
-            await guild.members.fetch(data.member.user.id)
+            await guild.members.cache.get(data.member.user.id)
             .then((member) => {
               if (!member){
                 console.log(`${data.member.user.username} has left the server.`);
                 } else {
                 console.log(`CAPTCHA fail message for ${data.member.user.username} sent`);
-                captchaEmbed.setTitle(`Captcha Fail`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
-                interaction.client.users.send(data.member.user.id, { embeds: [captchaEmbed] }).catch((err)=>{
+                captchaEmbed.setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage(process.env.CAPTCHA_FAIL).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`).setFooter({ text: 'Captcha verification failed'}).setTimestamp();
+                interaction.client.users.send(data.member.user.id, { embeds: [captchaEmbed] }).catch((e1)=>{
                 console.log(`${data.member.user.username} does not allow DM's from bots.`);
                 });
               }
-            }).catch ((err) => {
+            }).catch ((e1) => {
               console.log(`${data.member.user.username} has left the server.`);
             });
-        } catch (e){
+        } catch (e2){
           console.log(`${data.member.user.username} has left the server.`);
           }
     });
     captchaCommand.on("timeout", async data => {
         console.log(`CAPTCHA for ${data.member.user.username} timed out`);
         try {
-            await guild.members.fetch(data.member.user.id)
+            await guild.members.cache.get(data.member.user.id)
             .then((member) => {
               if (!member){
                 console.log(`${data.member.user.username} has left the server.`);
                 } else {
                 console.log(`CAPTCHA timeout message for ${data.member.user.username} sent`);
-                captchaEmbed.setTitle(`Captcha timed out`).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`);
-                interaction.client.users.send(data.member.user.id, { embeds: [captchaEmbed] }).catch((err)=>{
+                captchaEmbed.setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage(process.env.CAPTCHA_FAIL).setDescription(`To retry, Type /captcha in the <#${process.env.CAPTCHA_CHANNEL_ID}> channel.`).setFooter({ text: 'Captcha verification timed out'}).setTimestamp();
+                interaction.client.users.send(data.member.user.id, { embeds: [captchaEmbed] }).catch((e1)=>{
                 console.log(`${data.member.user.username} does not allow DM's from bots.`);
                 });
               }
-            }).catch ((err) => {
+            }).catch ((e1) => {
               console.log(`${data.member.user.username} has left the server.`);
             });
-        } catch (e){
+        } catch (e2){
           console.log(`${data.member.user.username} has left the server.`);
           }
     });
