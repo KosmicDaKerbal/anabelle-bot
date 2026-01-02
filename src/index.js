@@ -8,9 +8,19 @@ const dbOptions = {
   timeout: 5000,
   verbose: console.log
 };
-const db = require('better-sqlite3')(`${__dirname}/serverConfig.db`, dbOptions);
-db.pragma('journal_mode = WAL');
-db.exec (`
+const client = new Client({
+    intents: [
+      IntentsBitField.Flags.Guilds,
+      IntentsBitField.Flags.GuildMembers,
+      IntentsBitField.Flags.GuildMessages,
+      IntentsBitField.Flags.MessageContent,
+      IntentsBitField.Flags.DirectMessages,
+      GatewayIntentBits.Guilds,
+    ],
+  });
+client.db = require('better-sqlite3')(`${__dirname}/serverConfig.db`, dbOptions);
+client.db.pragma('journal_mode = WAL');
+client.db.exec (`
   CREATE TABLE IF NOT EXISTS config (
     guildID BIGINT PRIMARY KEY NOT NULL,
     verifiedRoleID BIGINT DEFAULT NULL,
@@ -28,16 +38,6 @@ db.exec (`
     ownerUserID BIGINT DEFAULT NULL
   );
 `);
-const client = new Client({
-    intents: [
-      IntentsBitField.Flags.Guilds,
-      IntentsBitField.Flags.GuildMembers,
-      IntentsBitField.Flags.GuildMessages,
-      IntentsBitField.Flags.MessageContent,
-      IntentsBitField.Flags.DirectMessages,
-      GatewayIntentBits.Guilds,
-    ],
-  });
 client.commands = new Collection();
 const commandFolders = fs.readdirSync(path.join(__dirname, 'commands'));
 for (const folder of commandFolders) {
