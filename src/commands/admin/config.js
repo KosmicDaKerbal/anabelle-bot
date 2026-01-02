@@ -1,6 +1,5 @@
 const {LabelBuilder, EmbedBuilder, SlashCommandBuilder, MessageFlags, ModalBuilder, RoleSelectMenuBuilder, ChannelSelectMenuBuilder, UserSelectMenuBuilder} = require("discord.js");
 const process = require("process");
-const { log } = require("util");
 module.exports = {
   data: new SlashCommandBuilder().setName('config').setDescription("**Admin Command**: Open Configuration Menu")
   .addSubcommand((subcommand) => subcommand.setName('roles').setDescription('**Admin Command**: Defines all important roles for the bot to work properly.'))
@@ -22,8 +21,8 @@ module.exports = {
             const unverifiedRole = new LabelBuilder().setLabel("Select the server's unverified role").setDescription('This role will be given to new members have not yet solved a CAPTCHA').setRoleSelectMenuComponent(unverifiedRoleSelect);
             const botsRole = new LabelBuilder().setLabel("Select the server's bots role").setDescription('This role will be given to newly added bots. No CAPTCHA will be asked to them.').setRoleSelectMenuComponent(botsRoleSelect);
             configRolesModal.addLabelComponents(verifiedRole, unverifiedRole, botsRole);
-            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             await interaction.showModal(configRolesModal);
+            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             break;
         case 'mod-team':
             const configModsModal = new ModalBuilder().setCustomId('configMods').setTitle('Server Mod Team Configuration for Anabelle');
@@ -36,8 +35,8 @@ module.exports = {
             const adminRole = new LabelBuilder().setLabel("Select the server's administrator role(s)").setDescription('Select up to 2 roles for administrators of the server').setRoleSelectMenuComponent(adminRoleSelect);
             const owner = new LabelBuilder().setLabel("Select the server's owner").setDescription("Select the server's owner").setUserSelectMenuComponent(ownerSelect);
             configModsModal.addLabelComponents(juniorModRole, seniorModRole, adminRole, owner);
-            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             await interaction.showModal(configModsModal);
+            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             break;
         case 'channels':
             const configChannelsModal = new ModalBuilder().setCustomId('configChannels').setTitle('Server Channels Configuration for Anabelle');
@@ -48,8 +47,8 @@ module.exports = {
             const logChannel = new LabelBuilder().setLabel("Select the bot's logging channel").setDescription('Select a channel where the bot can send actions log.').setChannelSelectMenuComponent(logChannelSelect);
             const welcomeChannel = new LabelBuilder().setLabel("Select the bot's welcome channel").setDescription('Select a channel where the bot can send user welcome messages.').setChannelSelectMenuComponent(welcomeChannelSelect);
             configChannelsModal.addLabelComponents(verificationChannel, logChannel, welcomeChannel);
-            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             await interaction.showModal(configChannelsModal);
+            await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral});
             break;
     }
   }
