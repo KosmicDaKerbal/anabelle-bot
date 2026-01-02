@@ -59,6 +59,10 @@ client.on(Events.GuildMemberAdd, async member => {
     if(!member.roles.cache.some(role => role.name === 'UNVERIFIED')) member.roles.add(member.guild.roles.cache.find(role => role.name === 'UNVERIFIED'));
     client.commands.get('captcha').execute(member, 1); // Arg 1 => Member object passed, Arg 0 => Interaction Object Passed
 });
+client.on(Events.GuildCreate, guild => {
+  console.log ("Joined Server ", guild.name, ", ID: ", guild.id);
+  client.db.exec(`INSERT INTO config(guildID) VALUES(${guild.id}) ON CONFLICT DO UPDATE SET guildID = ${guild.id}`);
+});
 client.on(Events.InteractionCreate, async (mainInteraction) => {
   const index = new EmbedBuilder();
 	if (!mainInteraction.isChatInputCommand()) return;
