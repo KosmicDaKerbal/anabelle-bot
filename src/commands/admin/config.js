@@ -18,8 +18,9 @@ module.exports = {
         ComponentType: ComponentType.Button,
         time: 30_000,
     });
-    configCollector.on("collect", async(rolesForm) => {
-        switch (rolesForm.customId){
+    configCollector.on("collect", async(Form) => {
+        console.log(Form);
+        switch (Form.customId){
         case 'rolesButton':
             const configRolesModal = new ModalBuilder().setCustomId('configRoles').setTitle('Server Roles Configuration for Anabelle');
             const verifiedRoleSelect = new RoleSelectMenuBuilder().setCustomId('vRole').setPlaceholder('Select a role').setMaxValues(1);
