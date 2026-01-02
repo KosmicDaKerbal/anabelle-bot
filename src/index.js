@@ -1,8 +1,33 @@
 require('dotenv').config();
 const { Client, Collection, GatewayIntentBits, IntentsBitField, EmbedBuilder, ActivityType, Events, MessageFlags } = require("discord.js");
-const sqlite3 = require ('better-sqlite3');
 const fs = require("fs");
 const path = require ("path");
+const dbOptions = {
+  readonly: false,
+  fileMustExist: false,
+  timeout: 5000,
+  verbose: console.log
+};
+const db = require('better-sqlite3')('./serverConfig.db', dbOptions);
+db.pragma('journal_mode = WAL');
+db.exec (`
+  CREATE TABLE IF NOT EXISTS config (
+    guildID BIGINT PRIMARY KEY NOT NULL,
+    verifiedRoleID BIGINT DEFAULT NULL,
+    unverifiedRoleID BIGINT DEFAULT NULL,
+    botsRoleID BIGINT DEFAULT NULL,
+    verificationChannelID BIGINT DEFAULT NULL,
+    logChannelID BIGINT DEFAULT NULL,
+    welcomeChannelID BIGINT DEFAULT NULL,
+    juniorMod1RoleID BIGINT DEFAULT NULL,
+    juniorMod2RoleID BIGINT DEFAULT NULL,
+    seniorMod1RoleID BIGINT DEFAULT NULL,
+    seniorMod2RoleID BIGINT DEFAULT NULL,
+    admin1RoleID BIGINT DEFAULT NULL,
+    admin2RoleID BIGINT DEFAULT NULL,
+    ownerUserID BIGINT DEFAULT NULL
+  );
+`);
 const client = new Client({
     intents: [
       IntentsBitField.Flags.Guilds,
