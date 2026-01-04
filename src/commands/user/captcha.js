@@ -14,7 +14,9 @@ module.exports = {
     attempts: 3,
     timeout: 600000,
     showAttemptCount: true,
-    customPromptEmbed: new EmbedBuilder().setTitle("w̶̼̃ḣ̷̬a̶̞̽t̸͉̓ ̷͈͌i̴̘͝s̵̪̈ ̷̡̿ẗ̴̺ẖ̵̇î̷̞s̷̼̑?̷̼͛").setDescription(`Captcha for <@${(!objectTypeCode) ? interaction.user.id : interaction.id}>`)
+    customPromptEmbed: new EmbedBuilder().setTitle("w̶̼̃ḣ̷̬a̶̞̽t̸͉̓ ̷͈͌i̴̘͝s̵̪̈ ̷̡̿ẗ̴̺ẖ̵̇î̷̞s̷̼̑?̷̼͛").setDescription(`Captcha for <@${(!objectTypeCode) ? interaction.user.id : interaction.id}>`),
+    customSuccessEmbed: new EmbedBuilder(),
+    customFailureEmbed: new EmbedBuilder(),
     });
     if (!objectTypeCode && interaction.member.roles.cache.some(role => role.name === 'Verified')) captchaEmbed.setTitle("User already verified").setDescription("You have texting permissions on the server.").setColor(0x00ff00);
     else {
@@ -24,6 +26,7 @@ module.exports = {
     catch (e) {
       console.error ("[ERROR] While running Captcha\n", e);
     }}
+    console.log(captchaCommand);
     if (!objectTypeCode) await interaction.reply({ embeds: [captchaEmbed], flags: MessageFlags.Ephemeral });
     const guild = await interaction.client.guilds.fetch(process.env.GUILD_ID);
     captchaCommand.on("success", async data => {
