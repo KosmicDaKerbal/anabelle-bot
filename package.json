@@ -15,7 +15,7 @@
     "canvas": "^3.1.2",
     "discord-logs": "^2.0.0",
     "discord.js": "^14.19.3",
-    "discord.js-captcha": "^3.0.8",
+    "discord.js-captcha": "file:lib/Discord.js-Captcha",
     "dotenv": "^16.5.0"
   }
 }
