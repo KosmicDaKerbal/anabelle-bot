@@ -1,5 +1,5 @@
 const {EmbedBuilder, MessageFlags, SlashCommandBuilder} = require("discord.js");
-const { Captcha } = require("discord.js-captcha");
+const { Captcha } = require("libanabelle-captcha");
 module.exports = {
   data: new SlashCommandBuilder().setName('captcha').setDescription("Generates a new captcha for human verification."),
   async execute (interaction, objectTypeCode) {
