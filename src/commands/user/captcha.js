@@ -37,7 +37,7 @@ module.exports = {
     });
     captchaCommand.on("failure", async data => {
         console.log(`[INFO] CAPTCHA for ${data.member.user.username} answered incorrectly, ID: ${data.member.user.id}`);
-            await guild.members.cache.get(data.member.user.id).then((member) => {
+            await guild.members.fetch(data.member.user.id).then((member) => {
               if (!member){
                 console.log(`[INFO] ${data.member.user.username} has left the server, ID: ${data.member.user.id}`);
                 } else {
@@ -53,7 +53,7 @@ module.exports = {
     });
     captchaCommand.on("timeout", async data => {
         console.log(`[INFO] CAPTCHA for ${data.member.user.username} timed out, ID: ${data.member.user.id}`);
-            await guild.members.cache.get(data.member.user.id).then((member) => {
+            await guild.members.fetch(data.member.user.id).then((member) => {
               if (!member){
                 console.log(`[INFO] ${data.member.user.username} has left the server, ID: ${data.member.user.id}`);
                 } else {
