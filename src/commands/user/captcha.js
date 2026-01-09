@@ -22,6 +22,7 @@ module.exports = {
     else {
       try {
       captchaCommand.present((!objectTypeCode) ? interaction.member : interaction);
+      console.log(`[INFO] CAPTCHA process initiated for user ${interaction.user.name}, ID: ${interaction.user.id} in guild ${(!objectTypeCode) ? interaction.member.guild.name : interaction.guild.name}, ID: ${(!objectTypeCode) ? interaction.member.guild.id : interaction.guild.id}`)
     }
     catch (e) {
       console.error ("[ERROR] While running Captcha\n", e);
