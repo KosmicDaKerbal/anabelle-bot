@@ -63,7 +63,7 @@ module.exports = {
             confirmEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: \`${submission.customId}\`\n`);
             if (submission){
                 for (const attribute in submission.fields.fields){
-                    console.log (attribute.values);
+                    console.log (attribute);
                 }
                 //console.log (submission.fields.fields);
                 submission.reply ({embeds: [confirmEmbed], flags: MessageFlags.Ephemeral});
