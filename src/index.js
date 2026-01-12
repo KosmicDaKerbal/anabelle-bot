@@ -75,8 +75,8 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
     index.setTitle("Command in development").setDescription("This command is still work in progress.").setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
     await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
 		return;
-	} else if (nullKeys.length > 0){
-    index.setTitle("Server Configuration Incomplete!").setDescription(`You haven't configured the roles and channels specific to the bot yet.\nPlease check out the \`/config\` subcommands for more information.\n\n\`\`\`Parameters undefined: ${nullKeys}\n\`\`\``).setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+	} else if (nullKeys.length > 0 || !localData){
+    index.setTitle("Server Configuration Incomplete!").setDescription(`You haven't configured the roles and channels specific to the bot yet.\nPlease check out the \`/config\` subcommands for more information.\n\n\`\`\`Parameters undefined: ${(!localData) ? "guildID" : nullKeys}\n\`\`\``).setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
     await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
     return;
   }
