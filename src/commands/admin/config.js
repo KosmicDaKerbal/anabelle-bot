@@ -11,7 +11,7 @@ module.exports = {
   async execute (interaction) {
     const configEmbed = new EmbedBuilder().setTitle(`Server Configuration: \`${interaction.options.getSubcommand()}\``);
     interaction.client.db.exec(`INSERT INTO localConfig(guildID) VALUES(${interaction.guild.id}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
-    const openSettingsForm = new ButtonBuilder().setCustomId(`${interaction.options.getSubcommand()}Button`).setLabel('Open Setup').setStyle(ButtonStyle.Primary).setDisabled(false);
+    const openSettingsForm = new ButtonBuilder().setCustomId(`${interaction.options.getSubcommand()}`).setLabel('Open Setup').setStyle(ButtonStyle.Primary).setDisabled(false);
     const buttonRow = new ActionRowBuilder().addComponents(openSettingsForm);
     const replyEmbed = await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral, components: [buttonRow]});
     const configCollector = replyEmbed.createMessageComponentCollector({
@@ -20,8 +20,8 @@ module.exports = {
     });
     configCollector.on("collect", async(Form) => {
         switch (Form.customId){
-        case 'rolesButton':
-            const configRolesModal = new ModalBuilder().setCustomId('rolesButton').setTitle('Server Roles Configuration');
+        case 'roles':
+            const configRolesModal = new ModalBuilder().setCustomId('roles').setTitle('Server Roles Configuration');
             const verifiedRoleSelect = new RoleSelectMenuBuilder().setCustomId('vRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true);
             const unverifiedRoleSelect = new RoleSelectMenuBuilder().setCustomId('uvRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true);
             const botsRoleSelect = new RoleSelectMenuBuilder().setCustomId('bRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true);
@@ -33,8 +33,8 @@ module.exports = {
             const filter = (modalInteraction) => modalInteraction.customId === 'configRoles' && modalInteraction.user.id === interaction.user.id;
             
             break;
-        case 'mod-teamButton':
-            const configModsModal = new ModalBuilder().setCustomId('mod-teamButton').setTitle('Server Mod Team Configuration');
+        case 'mod-team':
+            const configModsModal = new ModalBuilder().setCustomId('mod-team').setTitle('Server Mod Team Configuration');
             const juniorModRoleSelect = new RoleSelectMenuBuilder().setCustomId('jmRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false);
             const seniorModRoleSelect = new RoleSelectMenuBuilder().setCustomId('smRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false);
             const adminRoleSelect = new RoleSelectMenuBuilder().setCustomId('adRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false);
@@ -46,8 +46,8 @@ module.exports = {
             configModsModal.addLabelComponents(juniorModRole, seniorModRole, adminRole, owner);
             await Form.showModal(configModsModal);
             break;
-        case 'channelsButton':
-            const configChannelsModal = new ModalBuilder().setCustomId('channelsButton').setTitle('Server Channels Configuration');
+        case 'channels':
+            const configChannelsModal = new ModalBuilder().setCustomId('channels').setTitle('Server Channels Configuration');
             const logChannelSelect = new ChannelSelectMenuBuilder().setCustomId('lChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true);
             const verificationChannelSelect = new ChannelSelectMenuBuilder().setCustomId('vChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true);
             const welcomeChannelSelect = new ChannelSelectMenuBuilder().setCustomId('wChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true);
@@ -58,14 +58,18 @@ module.exports = {
             await Form.showModal(configChannelsModal);
             break;
         }
+        const confirmEmbed = new EmbedBuilder();
         try {
             const submission = await Form.awaitModalSubmit ({time: 120000});
+            confirmEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: ${submission.customId}\n`);
             if (submission){
-                console.log (submission);
-                configEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: `);
+                console.log (submission.fields);
+                submission.reply ({embeds: [confirmEmbed]});
             }
         } catch (e){
-            console.error(`Server Configuration for Guild ${interaction.guild.name}, ID: ${interaction.guild.id} timed out or failed.`)
+            console.error(`Server Configuration for Guild ${interaction.guild.name}, ID: ${interaction.guild.id} timed out or failed.`);
+            confirmEmbed.setTitle("Server configuration failed").setDescription(`Possibly due to timeout.`);
+            await Form.followUp({embeds: [confirmEmbed], flags: MessageFlags.Ephemeral});
         }
     });
     configCollector.on("end", async () => {
