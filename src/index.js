@@ -38,7 +38,6 @@ client.db.exec (`
     ownerUserID BIGINT DEFAULT NULL
   );
 `);
-var restartFlag = 0;
 client.commands = new Collection();
 const commandFolders = fs.readdirSync(path.join(__dirname, 'commands'));
 for (const folder of commandFolders) {
@@ -75,13 +74,12 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
 	}
 	try {
     client.user.setPresence({status: 'online'});
-	  if (!restartFlag) await command.execute(mainInteraction, 0);
+	  if (process.env.RESTART_FLAG === '0') await command.execute(mainInteraction, 0);
     else {
-      index.setTitle("Application restarting").setDescription("Commands are temporarily disabled.").setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+      index.setTitle("Permission Denied").setDescription("Commands are temporarily disabled.").setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
       await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
     }
     if (mainInteraction.commandName != 'restart') setTimeout(() => client.user.setPresence({status: 'idle'}), 5000);
-    else restartFlag = 1;
 	} catch (error) {
     console.log(error);
     index.setTitle("Error executing command").setDescription((process.env.MAINTANENCE_MODE === '0') ? "There was an error executing the command" : `Log: \n\`\`\`${error}\n\`\`\``).setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
@@ -91,6 +89,7 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
 });
   console.log("Connecting...");
   client.once(Events.ClientReady, async (c) => {
+    process.env.RESTART_FLAG = '0';
     console.log("Anabelle is runnning");
     client.user.setPresence({
       activities: [

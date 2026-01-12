@@ -14,9 +14,10 @@ module.exports = {
             time: 25_000,
           });
         collect.on("collect", async (rstInteraction) => {
-            const buttonEpoch = Math.floor(Date.now() / 1000);
             if (rstInteraction.user.id != process.env.APP_OWNER_ID) return rstInteraction.reply({embeds: [new EmbedBuilder().setTitle("This command is not for you!")], flags: MessageFlags.Ephemeral});
             if (rstInteraction.customId == 'restart'){
+                const buttonEpoch = Math.floor(Date.now() / 1000);
+                process.env.RESTART_FLAG = '1';
                 restartConfirm.setDisabled(true).setStyle(ButtonStyle.Success);
                 await interaction.editReply({ embeds: [restart], components: [component], });
             restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.SUCCESS }).setColor(0x00ff00).setTitle("Restarting...").setDescription(`Bot restarts <t:${messageEpoch + (25 - (buttonEpoch - messageEpoch))}:R> from now.`).setTimestamp();
@@ -33,6 +34,7 @@ module.exports = {
             setTimeout(() => interaction.client.user.setPresence({status: 'idle'}), 25000);
             restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.FAIL }).setColor(0xff0000).setTitle("Restart Abort").setDescription(`Bot restart cancelled.`).setTimestamp();
             await interaction.editReply({embeds: [restart], components: [],});
+            process.env.RESTART_FLAG = '0';
         });
     } else {
         restart.setTitle("Permission Denied").setDescription("Only the creator, KosmicDaKerbal is allowed to restart the bot.").setColor(0xff0000);
