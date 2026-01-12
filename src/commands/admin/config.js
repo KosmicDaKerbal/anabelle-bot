@@ -11,6 +11,7 @@ module.exports = {
   async execute (interaction) {
     const configEmbed = new EmbedBuilder().setTitle(`Server Configuration: \`${interaction.options.getSubcommand()}\``);
     interaction.client.db.exec(`INSERT INTO localConfig(guildID) VALUES(${interaction.guild.id}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
+    const previousData = interaction.client.db.prepare("SELECT * FROM localConfig WHERE guildID = ?").get(interaction.guild.id);
     const openSettingsForm = new ButtonBuilder().setCustomId(`${interaction.options.getSubcommand()}`).setLabel('Open Setup').setStyle(ButtonStyle.Primary).setDisabled(false);
     const buttonRow = new ActionRowBuilder().addComponents(openSettingsForm);
     const replyEmbed = await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral, components: [buttonRow]});
@@ -30,8 +31,6 @@ module.exports = {
             const botsRole = new LabelBuilder().setLabel("Select the server's bots role").setDescription('This role will be given to newly added bots. No CAPTCHA will be asked to them.').setRoleSelectMenuComponent(botsRoleSelect);
             configRolesModal.addLabelComponents(verifiedRole, unverifiedRole, botsRole);
             await Form.showModal(configRolesModal);
-            const filter = (modalInteraction) => modalInteraction.customId === 'configRoles' && modalInteraction.user.id === interaction.user.id;
-            
             break;
         case 'mod-team':
             const configModsModal = new ModalBuilder().setCustomId('mod-team').setTitle('Server Mod Team Configuration');
@@ -61,9 +60,9 @@ module.exports = {
         const confirmEmbed = new EmbedBuilder();
         try {
             const submission = await Form.awaitModalSubmit ({time: 120000});
-            confirmEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: ${submission.customId}\n`);
+            confirmEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: \`${submission.customId}\`\n`);
             if (submission){
-                console.log (submission.fields);
+                console.log (submission.fields.fields[0].values);
                 submission.reply ({embeds: [confirmEmbed]});
             }
         } catch (e){
