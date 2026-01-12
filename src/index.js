@@ -69,7 +69,7 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
   const localData = client.db.prepare("SELECT * FROM localConfig WHERE guildID = ?").get(mainInteraction.guild.id);
   console.log(localData);
   const nullKeys = [];
-  for (const key in localData) if (jsonObject[key] === null) nullKeys.push(key);
+  for (const key in localData) if (localData[key] === null) nullKeys.push(key);
 	const command = mainInteraction.client.commands.get(mainInteraction.commandName);
 	if (!command) {
     index.setTitle("Command in development").setDescription("This command is still work in progress.").setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
