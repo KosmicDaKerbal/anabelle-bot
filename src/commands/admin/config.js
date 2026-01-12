@@ -66,6 +66,7 @@ module.exports = {
                 submission.reply ({embeds: [confirmEmbed]});
             }
         } catch (e){
+            console.log(e);
             console.error(`Server Configuration for Guild ${interaction.guild.name}, ID: ${interaction.guild.id} timed out or failed.`);
             confirmEmbed.setTitle("Server configuration failed").setDescription(`Possibly due to timeout.`);
             await Form.followUp({embeds: [confirmEmbed], flags: MessageFlags.Ephemeral});
