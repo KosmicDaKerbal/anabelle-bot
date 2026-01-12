@@ -21,7 +21,7 @@ const client = new Client({
 client.db = require('better-sqlite3')(`${__dirname}/serverConfig.db`, dbOptions);
 client.db.pragma('journal_mode = WAL');
 client.db.exec (`
-  CREATE TABLE IF NOT EXISTS config (
+  CREATE TABLE IF NOT EXISTS localConfig (
     guildID BIGINT PRIMARY KEY NOT NULL,
     verifiedRoleID BIGINT DEFAULT NULL,
     unverifiedRoleID BIGINT DEFAULT NULL,
@@ -38,6 +38,7 @@ client.db.exec (`
     ownerUserID BIGINT DEFAULT NULL
   );
 `);
+var restartFlag = 0;
 client.commands = new Collection();
 const commandFolders = fs.readdirSync(path.join(__dirname, 'commands'));
 for (const folder of commandFolders) {
@@ -74,8 +75,13 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
 	}
 	try {
     client.user.setPresence({status: 'online'});
-		await command.execute(mainInteraction, 0);
+	  if (!restartFlag) await command.execute(mainInteraction, 0);
+    else {
+      index.setTitle("Application restarting").setDescription("Commands are temporarily disabled.").setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+      await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
+    }
     if (mainInteraction.commandName != 'restart') setTimeout(() => client.user.setPresence({status: 'idle'}), 5000);
+    else restartFlag = 1;
 	} catch (error) {
     console.log(error);
     index.setTitle("Error executing command").setDescription((process.env.MAINTANENCE_MODE === '0') ? "There was an error executing the command" : `Log: \n\`\`\`${error}\n\`\`\``).setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();

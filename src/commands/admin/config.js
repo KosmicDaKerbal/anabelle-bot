@@ -10,7 +10,7 @@ module.exports = {
   .addSubcommand((subcommand) => subcommand.setName('delete').setDescription('**Admin Command**: Remove all configurations')),
   async execute (interaction) {
     const configEmbed = new EmbedBuilder().setTitle(`Server Configuration: \`${interaction.options.getSubcommand()}\``);
-    interaction.client.db.exec(`INSERT INTO config(guildID) VALUES(${interaction.guild.id}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
+    interaction.client.db.exec(`INSERT INTO localConfig(guildID) VALUES(${interaction.guild.id}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
     const openSettingsForm = new ButtonBuilder().setCustomId(`${interaction.options.getSubcommand()}Button`).setLabel('Open Setup').setStyle(ButtonStyle.Primary).setDisabled(false);
     const buttonRow = new ActionRowBuilder().addComponents(openSettingsForm);
     const replyEmbed = await interaction.reply({embeds: [configEmbed], flags: MessageFlags.Ephemeral, components: [buttonRow]});

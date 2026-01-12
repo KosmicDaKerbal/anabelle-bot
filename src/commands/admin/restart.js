@@ -3,7 +3,9 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentTyp
 module.exports = {
         data: new SlashCommandBuilder().setName('restart').setDescription("**Admin Command**: Restarts the bot process."),
         async execute (interaction) {
+        const messageEpoch = Math.floor(Date.now() / 1000);
         const restart = new EmbedBuilder().setTitle("Confirm Bot Restart").setColor(0x8c3f7a).setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.PROCESSING }).setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+        if(interaction.user.id == process.env.APP_OWNER_ID){
         const restartConfirm = new ButtonBuilder().setCustomId("restart").setLabel("Restart").setStyle(ButtonStyle.Danger).setDisabled(false);
         const component = new ActionRowBuilder().addComponents(restartConfirm);
         const rstreply = await interaction.reply({ embeds: [restart], components: [component] });
@@ -12,14 +14,12 @@ module.exports = {
             time: 25_000,
           });
         collect.on("collect", async (rstInteraction) => {
-            //if (rstInteraction.user.id != interaction.user.id) return rstInteraction.reply({embeds: [new EmbedBuilder().setTitle("This command is not for you!")], flags: MessageFlags.Ephemeral});
-            //REPLACE v with ^ when DB implemented
-            if (rstInteraction.user.id != '898957399677878332') return rstInteraction.reply({embeds: [new EmbedBuilder().setTitle("This command is not for you!")], flags: MessageFlags.Ephemeral});
-
+            const buttonEpoch = Math.floor(Date.now() / 1000);
+            if (rstInteraction.user.id != process.env.APP_OWNER_ID) return rstInteraction.reply({embeds: [new EmbedBuilder().setTitle("This command is not for you!")], flags: MessageFlags.Ephemeral});
             if (rstInteraction.customId == 'restart'){
                 restartConfirm.setDisabled(true).setStyle(ButtonStyle.Success);
                 await interaction.editReply({ embeds: [restart], components: [component], });
-            restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.SUCCESS }).setColor(0x00ff00).setTitle("Restarting...").setDescription(`Bot restarts <t:${Math.floor(Date.now() / 1000) + 15}:R> from now.`).setTimestamp();
+            restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.SUCCESS }).setColor(0x00ff00).setTitle("Restarting...").setDescription(`Bot restarts <t:${messageEpoch + (25 - (buttonEpoch - messageEpoch))}:R> from now.`).setTimestamp();
             await rstInteraction.update({ embeds: [restart] });
             }
             interaction.client.user.setPresence({status: 'dnd'});
@@ -34,5 +34,9 @@ module.exports = {
             restart.setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.FAIL }).setColor(0xff0000).setTitle("Restart Abort").setDescription(`Bot restart cancelled.`).setTimestamp();
             await interaction.editReply({embeds: [restart], components: [],});
         });
+    } else {
+        restart.setTitle("Permission Denied").setDescription("Only the creator, KosmicDaKerbal is allowed to restart the bot.").setColor(0xff0000);
+        await interaction.reply({embeds: [restart], flags: MessageFlags.Ephemeral});
     }
+  }
 }
