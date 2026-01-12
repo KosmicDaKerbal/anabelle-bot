@@ -3,10 +3,12 @@ const { Captcha } = require("libanabelle-captcha");
 module.exports = {
   data: new SlashCommandBuilder().setName('captcha').setDescription("Generates a new captcha for human verification."),
   async execute (interaction, objectTypeCode) {
+    const guild = (!objectTypeCode) ? interaction.member.guild : interaction.guild;
     const captchaEmbed = new EmbedBuilder().setTitle("Captcha verification process started. Check your DM's.").setDescription(`If your DM's are closed, check the verification channel. If that doesn't work, please open your DM's temporarily.`).setColor(0xffff00);
+    const localData = interaction.client.db.prepare("SELECT unverifiedRoleID, verifiedRoleID, verificationChannelID, welcomeChannelID FROM localConfig WHERE guildID = ?").get(guild.id);
     const captchaCommand = new Captcha(interaction.client, {
-    roleID: (interaction.guild.roles.cache.find(role => role.name === 'Verified')).id,
-    channelID: (interaction.guild.channels.cache.find(channel => channel.name === 'verification')).id,
+    roleID: localData.verifiedRoleID,
+    channelID: localData.verificationChannelID,
     sendToTextChannel: false,
     addRoleOnSuccess: true,
     kickOnFailure: false,
@@ -15,20 +17,19 @@ module.exports = {
     timeout: 600000,
     showAttemptCount: true,
     customPromptEmbed: new EmbedBuilder().setTitle("w̶̼̃ḣ̷̬a̶̞̽t̸͉̓ ̷͈͌i̴̘͝s̵̪̈ ̷̡̿ẗ̴̺ẖ̵̇î̷̞s̷̼̑?̷̼͛").setDescription(`Captcha for <@${(!objectTypeCode) ? interaction.user.id : interaction.id}>`).setColor(0x8c3f7a),
-    customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage(process.env.CAPTCHA_SUCCESS).setFooter({ text: 'Captcha verification complete', iconURL: (!objectTypeCode) ? interaction.member.guild.iconURL({ dynamic: true, size: 32 }) : interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp().setColor(0x00ff00),
-    customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage(process.env.CAPTCHA_FAIL).setFooter({ text: 'Captcha verification failed', iconURL: (!objectTypeCode) ? interaction.member.guild.iconURL({ dynamic: true, size: 32 }) : interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp().setColor(0xff0000),
+    customSuccessEmbed: new EmbedBuilder().setTitle("I̶̡͠ ̶͓͝l̷̬̒i̷̳͘ķ̴̃e̶͍͝ ̶̦͐ỷ̶̦o̴̰͝ú̸̝.̵͇͘").setImage(process.env.CAPTCHA_SUCCESS).setFooter({ text: 'Captcha verification complete', iconURL: guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp().setColor(0x00ff00),
+    customFailureEmbed: new EmbedBuilder().setTitle("Ī̵̮ ̴̥̒c̵̝͋a̶̺͘n̴̤͑'̶͚̋t̶̳̿ ̶̥͌p̵̦̒l̴͈̓a̵̹͝ȳ̷̭ ̶͓̈́ẃ̷̘ĭ̶͎t̸̹͐h̶̆͜ ̵͈̎ỳ̶̯o̸̹͗u̶̙͆").setImage(process.env.CAPTCHA_FAIL).setFooter({ text: 'Captcha verification failed', iconURL: guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp().setColor(0xff0000),
     });
     if (!objectTypeCode && interaction.member.roles.cache.some(role => role.name === 'Verified')) captchaEmbed.setTitle("User already verified").setDescription("You have texting permissions on the server.").setColor(0x00ff00);
     else {
       try {
       captchaCommand.present((!objectTypeCode) ? interaction.member : interaction);
-      console.log(`[INFO] CAPTCHA process initiated for user ${interaction.user.name}, ID: ${interaction.user.id} in guild ${(!objectTypeCode) ? interaction.member.guild.name : interaction.guild.name}, ID: ${(!objectTypeCode) ? interaction.member.guild.id : interaction.guild.id}`)
+      console.log(`[INFO] CAPTCHA process initiated for user ${interaction.user.name}, ID: ${interaction.user.id} in guild ${guild.name}, ID: ${guild.id}`)
     }
     catch (e) {
       console.error ("[ERROR] While running Captcha\n", e);
     }}
     if (!objectTypeCode) await interaction.reply({ embeds: [captchaEmbed], flags: MessageFlags.Ephemeral });
-    const guild = await interaction.client.guilds.fetch(process.env.GUILD_ID);
     captchaCommand.on("success", async data => {
       const vchannel = await interaction.client.channels.fetch(process.env.GCHAT_ID);
       console.log(`[INFO] ${data.member.user.username} has solved a CAPTCHA, ID: ${data.member.user.id}`);

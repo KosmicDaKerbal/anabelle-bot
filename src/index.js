@@ -61,17 +61,24 @@ client.on(Events.GuildMemberAdd, async member => {
 });
 client.on(Events.GuildCreate, guild => {
   console.log ("Joined Server ", guild.name, ", ID: ", guild.id);
-  client.db.exec(`INSERT INTO config(guildID) VALUES(${guild.id}) ON CONFLICT DO UPDATE SET guildID = ${guild.id}`);
+  client.db.exec(`INSERT INTO localConfig(guildID) VALUES(${guild.id}) ON CONFLICT DO UPDATE SET guildID = ${guild.id}`);
 });
 client.on(Events.InteractionCreate, async (mainInteraction) => {
   const index = new EmbedBuilder();
 	if (!mainInteraction.isChatInputCommand()) return;
+  const localData = client.db.prepare("SELECT * FROM localConfig WHERE guildID = ?").get(mainInteraction.guild.id);
+  const nullKeys = [];
+  for (const key in localData) if (jsonObject[key] === null) nullKeys.push(key);
 	const command = mainInteraction.client.commands.get(mainInteraction.commandName);
 	if (!command) {
     index.setTitle("Command in development").setDescription("This command is still work in progress.").setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
     await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
 		return;
-	}
+	} else if (nullKeys.length > 0){
+    index.setTitle("Server Configuration Incomplete!").setDescription(`You haven't configured the roles and channels specific to the bot yet.\nPlease check out the \`/config\` subcommands for more information.\n\n\`\`\`Parameters undefined: ${nullKeys}\n\`\`\``).setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+    await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
+    return;
+  }
 	try {
     client.user.setPresence({status: 'online'});
 	  if (process.env.RESTART_FLAG === '0') await command.execute(mainInteraction, 0);
@@ -94,9 +101,9 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
     client.user.setPresence({
       activities: [
       {
-        type: (process.env.MAINTANENCE_MODE === "0") ? ActivityType.Watching : ActivityType.Custom,
+        type: (process.env.MAINTANENCE_MODE === '0') ? ActivityType.Watching : ActivityType.Custom,
         name: "you",
-        state: (process.env.MAINTANENCE_MODE === "0") ? "Ị̵̀'̴̩͑ḿ̵̥ ̴͓̍ẘ̷̟à̸̰t̸̬͠ċ̶̫h̶̫̕i̷̛̠n̶̘̏g̶͎̍ ̷̪͋y̶̬̽ơ̵̙ŭ̴̻.̴̣̉" : "--MAINTANENCE MODE--"
+        state: (process.env.MAINTANENCE_MODE === '0') ? "Ị̵̀'̴̩͑ḿ̵̥ ̴͓̍ẘ̷̟à̸̰t̸̬͠ċ̶̫h̶̫̕i̷̛̠n̶̘̏g̶͎̍ ̷̪͋y̶̬̽ơ̵̙ŭ̴̻.̴̣̉" : "--MAINTANENCE MODE--"
       }
     ],
       status: 'idle'

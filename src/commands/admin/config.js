@@ -19,7 +19,6 @@ module.exports = {
         time: 30_000,
     });
     configCollector.on("collect", async(Form) => {
-        console.log(Form);
         switch (Form.customId){
         case 'rolesButton':
             const configRolesModal = new ModalBuilder().setCustomId('configRoles').setTitle('Server Roles Configuration');
