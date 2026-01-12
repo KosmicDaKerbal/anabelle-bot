@@ -67,7 +67,6 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
   const index = new EmbedBuilder();
 	if (!mainInteraction.isChatInputCommand()) return;
   const localData = client.db.prepare("SELECT verifiedRoleID, unverifiedRoleID, botsRoleID, verificationChannelID, welcomeChannelID FROM localConfig WHERE guildID = ?").get(mainInteraction.guild.id);
-  console.log(localData);
   const nullKeys = [];
   for (const key in localData) if (localData[key] === null) nullKeys.push(key);
 	const command = mainInteraction.client.commands.get(mainInteraction.commandName);
@@ -76,7 +75,7 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
     await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
 		return;
 	} else if (nullKeys.length > 0 || !localData){
-    index.setTitle("Server Configuration Incomplete!").setDescription(`You haven't configured the critical roles and channels specific to the bot yet.\nPlease check out the \`/config\` subcommands for more information.\n\n\`\`\`Parameters undefined: ${(!localData) ? "guildID" : nullKeys}\n\`\`\``).setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+    index.setTitle("Server Configuration Incomplete!").setDescription(`You haven't configured the critical roles and channels specific to the bot yet.\nPlease check out the \`/config\` subcommands for more information.\n\n\`\`\`Parameters undefined: ${(!localData) ? "guildID" : nullKeys.join(", ")}\n\`\`\``).setColor(0xff0000).setFooter({ text: mainInteraction.guild.name, iconURL: mainInteraction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
     await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
     return;
   }

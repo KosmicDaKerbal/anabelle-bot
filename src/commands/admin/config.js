@@ -21,7 +21,7 @@ module.exports = {
     configCollector.on("collect", async(Form) => {
         switch (Form.customId){
         case 'rolesButton':
-            const configRolesModal = new ModalBuilder().setCustomId('configRoles').setTitle('Server Roles Configuration');
+            const configRolesModal = new ModalBuilder().setCustomId('rolesButton').setTitle('Server Roles Configuration');
             const verifiedRoleSelect = new RoleSelectMenuBuilder().setCustomId('vRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true);
             const unverifiedRoleSelect = new RoleSelectMenuBuilder().setCustomId('uvRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true);
             const botsRoleSelect = new RoleSelectMenuBuilder().setCustomId('bRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true);
@@ -30,9 +30,11 @@ module.exports = {
             const botsRole = new LabelBuilder().setLabel("Select the server's bots role").setDescription('This role will be given to newly added bots. No CAPTCHA will be asked to them.').setRoleSelectMenuComponent(botsRoleSelect);
             configRolesModal.addLabelComponents(verifiedRole, unverifiedRole, botsRole);
             await Form.showModal(configRolesModal);
+            const filter = (modalInteraction) => modalInteraction.customId === 'configRoles' && modalInteraction.user.id === interaction.user.id;
+            
             break;
         case 'mod-teamButton':
-            const configModsModal = new ModalBuilder().setCustomId('configMods').setTitle('Server Mod Team Configuration');
+            const configModsModal = new ModalBuilder().setCustomId('mod-teamButton').setTitle('Server Mod Team Configuration');
             const juniorModRoleSelect = new RoleSelectMenuBuilder().setCustomId('jmRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false);
             const seniorModRoleSelect = new RoleSelectMenuBuilder().setCustomId('smRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false);
             const adminRoleSelect = new RoleSelectMenuBuilder().setCustomId('adRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false);
@@ -45,7 +47,7 @@ module.exports = {
             await Form.showModal(configModsModal);
             break;
         case 'channelsButton':
-            const configChannelsModal = new ModalBuilder().setCustomId('configChannels').setTitle('Server Channels Configuration');
+            const configChannelsModal = new ModalBuilder().setCustomId('channelsButton').setTitle('Server Channels Configuration');
             const logChannelSelect = new ChannelSelectMenuBuilder().setCustomId('lChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true);
             const verificationChannelSelect = new ChannelSelectMenuBuilder().setCustomId('vChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true);
             const welcomeChannelSelect = new ChannelSelectMenuBuilder().setCustomId('wChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true);
@@ -55,6 +57,15 @@ module.exports = {
             configChannelsModal.addLabelComponents(verificationChannel, logChannel, welcomeChannel);
             await Form.showModal(configChannelsModal);
             break;
+        }
+        try {
+            const submission = await Form.awaitModalSubmit ({time: 120000});
+            if (submission){
+                console.log (submission);
+                configEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: `);
+            }
+        } catch (e){
+            console.error(`Server Configuration for Guild ${interaction.guild.name}, ID: ${interaction.guild.id} timed out or failed.`)
         }
     });
     configCollector.on("end", async () => {
