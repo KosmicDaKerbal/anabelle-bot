@@ -62,8 +62,12 @@ module.exports = {
             const submission = await Form.awaitModalSubmit ({time: 120000});
             confirmEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: \`${submission.customId}\`\n`);
             if (submission){
-                const data = Object.values(submission.fields.fields).flatMap(id => id.values);
-                console.log (data);
+                switch(submission.customId){
+                    case 'roles':
+                        const selectedRoles = [submission.fields.getRoleSelectValues('vRole')[0], submission.fields.getRoleSelectValues('uvRole')[0], submission.fields.getRoleSelectValues('bRole')[0]];
+                        console.log (selectedRoles);
+                        break;
+                }
                 submission.reply ({embeds: [confirmEmbed], flags: MessageFlags.Ephemeral});
             }
         } catch (e){
