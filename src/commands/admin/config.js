@@ -65,7 +65,9 @@ module.exports = {
                 switch(submission.customId){
                     case 'roles':
                         //const selectedRoles = [submission.fields.getRoleSelectValues('vRole')[0], submission.fields.getRoleSelectValues('uvRole')[0], submission.fields.getRoleSelectValues('bRole')[0]];
-                        console.log (Form.fields.getRoleSelectValues('vRole'));
+                        console.log (Form.fields);
+                        console.log(submission.fields);
+                        console.log(submission.fields.fields)
                         break;
                 }
                 submission.reply ({embeds: [confirmEmbed], flags: MessageFlags.Ephemeral});
