@@ -67,6 +67,7 @@ client.on(Events.InteractionCreate, async (mainInteraction) => {
   const index = new EmbedBuilder();
 	if (!mainInteraction.isChatInputCommand()) return;
   const localData = client.db.prepare("SELECT * FROM localConfig WHERE guildID = ?").get(mainInteraction.guild.id);
+  console.log(localData);
   const nullKeys = [];
   for (const key in localData) if (jsonObject[key] === null) nullKeys.push(key);
 	const command = mainInteraction.client.commands.get(mainInteraction.commandName);
