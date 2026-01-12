@@ -62,7 +62,7 @@ module.exports = {
             const submission = await Form.awaitModalSubmit ({time: 120000});
             confirmEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: \`${submission.customId}\`\n`);
             if (submission){
-                console.log (submission.fields.fields[0]);
+                console.log (submission.fields.fields[1]);
                 submission.reply ({embeds: [confirmEmbed]});
             }
         } catch (e){
