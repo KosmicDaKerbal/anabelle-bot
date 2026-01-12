@@ -66,7 +66,7 @@ module.exports = {
                     case 'roles':
                         //const selectedRoles = [submission.fields.getRoleSelectValues('vRole')[0], submission.fields.getRoleSelectValues('uvRole')[0], submission.fields.getRoleSelectValues('bRole')[0]];
                         //console.log (Form.fields);
-                        console.log(submission.fields.fields.get('vRole'));
+                        console.log(submission.fields.fields.get('vRole').values[0]);
                         //console.log(submission.fields.fields);
                         break;
                 }
