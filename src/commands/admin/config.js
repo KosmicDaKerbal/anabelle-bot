@@ -1,4 +1,4 @@
-const {LabelBuilder, EmbedBuilder, SlashCommandBuilder, MessageFlags, ModalBuilder, RoleSelectMenuBuilder, ChannelSelectMenuBuilder, UserSelectMenuBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType} = require("discord.js");
+const {LabelBuilder, EmbedBuilder, SlashCommandBuilder, MessageFlags, ModalBuilder, RoleSelectMenuBuilder, ChannelSelectMenuBuilder, UserSelectMenuBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, PermissionsBitField} = require("discord.js");
 const process = require("process");
 module.exports = {
   data: new SlashCommandBuilder().setName('config').setDescription("**Admin Command**: Open Configuration Menu")
@@ -60,16 +60,23 @@ module.exports = {
         const confirmEmbed = new EmbedBuilder();
         try {
             const submission = await Form.awaitModalSubmit ({time: 120000});
-            confirmEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: \`${submission.customId}\`\n`);
             if (submission){
                 switch(submission.customId){
                     case 'roles':
-                        //const selectedRoles = [submission.fields.getRoleSelectValues('vRole')[0], submission.fields.getRoleSelectValues('uvRole')[0], submission.fields.getRoleSelectValues('bRole')[0]];
-                        //console.log (Form.fields);
-                        console.log(submission.fields.fields.get('vRole').values[0]);
-                        //console.log(submission.fields.fields);
+                        //const roleUpdates = `<@&${previousData.verifiedRoleID}> => <@&${submission.fields.fields.get('vRole').values[0]}>\n<@&${previousData.unverifiedRoleID}> => <@&${submission.fields.fields.get('uvRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('bRole').values[0]}>`;
+                        interaction.client.db.exec(`INSERT INTO localConfig(verifiedRoleID, unverifiedRoleID, botsRoleID) VALUES(${submission.fields.fields.get('vRole').values[0]}, ${submission.fields.fields.get('uvRole').values[0]}, ${submission.fields.fields.get('bRole').values[0]}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
+                        break;
+                    case 'mod-team':
+                        //const mtUpdates = `<@&${previousData.verifiedRoleID}> => <@&${submission.fields.fields.get('jmRole').values[0]}>\n<@&${previousData.unverifiedRoleID}> => <@&${submission.fields.fields.get('smRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('adRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('owner').values[0]}>`;
+                        //const selectedModRoles = [submission.fields.fields.get('jmRole').values[0], submission.fields.fields.get('smRole').values[0], submission.fields.fields.get('adRole').values[0], submission.fields.fields.get('owner').values[0]];
+                        break;
+                    case 'channels':
+                        //const channelUpdates = `<@&${previousData.logChannelID}> => <@&${submission.fields.fields.get('vRole').values[0]}>\n<@&${previousData.unverifiedRoleID}> => <@&${submission.fields.fields.get('uvRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('bRole').values[0]}>`;
+                        interaction.client.db.exec(`INSERT INTO localConfig(logChannelID, verificationChannelID, welcomeChannelID) VALUES(${submission.fields.fields.get('lchannel').values[0]}, ${submission.fields.fields.get('vChannel').values[0]}, ${submission.fields.fields.get('wChannel').values[0]}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
+                        //const selectedChannels = [submission.fields.fields.get('lChannel').values[0], submission.fields.fields.get('vChannel').values[0], submission.fields.fields.get('wChannel').values[0]];
                         break;
                 }
+                confirmEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: \`${submission.customId}\`\n`);
                 submission.reply ({embeds: [confirmEmbed], flags: MessageFlags.Ephemeral});
             }
         } catch (e){
