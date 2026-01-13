@@ -64,7 +64,7 @@ module.exports = {
                 switch(submission.customId){
                     case 'roles':
                         //const roleUpdates = `<@&${previousData.verifiedRoleID}> => <@&${submission.fields.fields.get('vRole').values[0]}>\n<@&${previousData.unverifiedRoleID}> => <@&${submission.fields.fields.get('uvRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('bRole').values[0]}>`;
-                        interaction.client.db.exec(`INSERT INTO localConfig(verifiedRoleID, unverifiedRoleID, botsRoleID) VALUES(${interaction.guild.id}, ${submission.fields.fields.get('vRole').values[0]}, ${submission.fields.fields.get('uvRole').values[0]}, ${submission.fields.fields.get('bRole').values[0]}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
+                        interaction.client.db.exec(`INSERT INTO localConfig(verifiedRoleID, unverifiedRoleID, botsRoleID) VALUES(${submission.fields.fields.get('vRole').values[0]}, ${submission.fields.fields.get('uvRole').values[0]}, ${submission.fields.fields.get('bRole').values[0]}) WHERE guildID = ${interaction.guild.id} ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
                         break;
                     case 'mod-team':
                         //const mtUpdates = `<@&${previousData.verifiedRoleID}> => <@&${submission.fields.fields.get('jmRole').values[0]}>\n<@&${previousData.unverifiedRoleID}> => <@&${submission.fields.fields.get('smRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('adRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('owner').values[0]}>`;
@@ -72,7 +72,7 @@ module.exports = {
                         break;
                     case 'channels':
                         //const channelUpdates = `<@&${previousData.logChannelID}> => <@&${submission.fields.fields.get('vRole').values[0]}>\n<@&${previousData.unverifiedRoleID}> => <@&${submission.fields.fields.get('uvRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('bRole').values[0]}>`;
-                        interaction.client.db.exec(`INSERT INTO localConfig(guildID, logChannelID, verificationChannelID, welcomeChannelID) VALUES(${interaction.guild.id}, ${submission.fields.fields.get('lchannel').values[0]}, ${submission.fields.fields.get('vChannel').values[0]}, ${submission.fields.fields.get('wChannel').values[0]}) ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
+                        interaction.client.db.exec(`INSERT INTO localConfig(logChannelID, verificationChannelID, welcomeChannelID) VALUES(${submission.fields.fields.get('lchannel').values[0]}, ${submission.fields.fields.get('vChannel').values[0]}, ${submission.fields.fields.get('wChannel').values[0]}) WHERE guildID = ${interaction.guild.id} ON CONFLICT DO UPDATE SET guildID = ${interaction.guild.id}`);
                         //const selectedChannels = [submission.fields.fields.get('lChannel').values[0], submission.fields.fields.get('vChannel').values[0], submission.fields.fields.get('wChannel').values[0]];
                         break;
                 }
