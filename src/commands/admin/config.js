@@ -24,28 +24,27 @@ module.exports = {
         const roleSelector = new RoleSelectMenuBuilder();
         const channelSelector = new ChannelSelectMenuBuilder();
         const userSelector = new UserSelectMenuBuilder();
-        const label = new LabelBuilder();
         switch (Form.customId){
         case 'roles':
             promptModal.setCustomId('roles').setTitle('Server Roles Configuration');
-            const verificationRole = label.setLabel("Select the server's verified role").setDescription('This role will be given to new members who successfully solve a CAPTCHA.').setRoleSelectMenuComponent(roleSelector.setCustomId('vRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true));
-            const unverifiedRole = label.setLabel("Select the server's unverified role").setDescription('This role will be given to new members have not yet solved a CAPTCHA').setRoleSelectMenuComponent(roleSelector.setCustomId('uvRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true));
-            const botsRole = label.setLabel("Select the server's bots role").setDescription('This role will be given to newly added bots. No CAPTCHA will be asked to them.').setRoleSelectMenuComponent(roleSelector.setCustomId('bRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true));
+            const verificationRole = new LabelBuilder().setLabel("Select the server's verified role").setDescription('This role will be given to new members who successfully solve a CAPTCHA.').setRoleSelectMenuComponent(roleSelector.setCustomId('vRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true));
+            const unverifiedRole = new LabelBuilder().setLabel("Select the server's unverified role").setDescription('This role will be given to new members have not yet solved a CAPTCHA').setRoleSelectMenuComponent(roleSelector.setCustomId('uvRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true));
+            const botsRole = new LabelBuilder().setLabel("Select the server's bots role").setDescription('This role will be given to newly added bots. No CAPTCHA will be asked to them.').setRoleSelectMenuComponent(roleSelector.setCustomId('bRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true));
             promptModal.addLabelComponents(verificationRole, unverifiedRole, botsRole);
             break;
         case 'mod-team':
             promptModal.setCustomId('mod-team').setTitle('Server Mod Team Configuration');
-            const jmRole = label.setLabel("Select the server's junior mod role(s)").setDescription('Select up to 2 roles for temporary admins, trial mods etc.').setRoleSelectMenuComponent(roleSelector.setCustomId('jmRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false));
-            const smRole = label.setLabel("Select the server's senior mod role(s)").setDescription('Select up to 2 roles for permanent moderators').setRoleSelectMenuComponent(roleSelector.setCustomId('smRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false));
-            const admrole = label.setLabel("Select the server's administrator role(s)").setDescription('Select up to 2 roles for administrators of the server').setRoleSelectMenuComponent(roleSelector.setCustomId('adRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false));
-            const oRole = label.setLabel("Select the server's owner").setDescription("Select the server's owner").setUserSelectMenuComponent(userSelector.setCustomId('owner').setPlaceholder('Select user').setMaxValues(1).setRequired(false));
+            const jmRole = new LabelBuilder().setLabel("Select the server's junior mod role(s)").setDescription('Select up to 2 roles for temporary admins, trial mods etc.').setRoleSelectMenuComponent(roleSelector.setCustomId('jmRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false));
+            const smRole = new LabelBuilder().setLabel("Select the server's senior mod role(s)").setDescription('Select up to 2 roles for permanent moderators').setRoleSelectMenuComponent(roleSelector.setCustomId('smRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false));
+            const admrole = new LabelBuilder().setLabel("Select the server's administrator role(s)").setDescription('Select up to 2 roles for administrators of the server').setRoleSelectMenuComponent(roleSelector.setCustomId('adRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false));
+            const oRole = new LabelBuilder().setLabel("Select the server's owner").setDescription("Select the server's owner").setUserSelectMenuComponent(userSelector.setCustomId('owner').setPlaceholder('Select user').setMaxValues(1).setRequired(false));
             promptModal.addLabelComponents(jmRole, smRole, admrole, oRole);
             break;
         case 'channels':
             promptModal.setCustomId('channels').setTitle('Server Channels Configuration');
-            const vChannel = label.setLabel("Select the bot's verification channel").setDescription('Select a channel where the verification messages can be sent in case the user has disabled DMs.').setChannelSelectMenuComponent(channelSelector.setCustomId('vChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true));
-            const lChannel = label.setLabel("Select the bot's logging channel").setDescription('Select a channel where the bot can send actions log.').setChannelSelectMenuComponent(channelSelector.setCustomId('lChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true));
-            const wChannel = label.setLabel("Select the bot's welcome channel").setDescription('Select a channel where the bot can send user welcome messages.').setChannelSelectMenuComponent(channelSelector.setCustomId('wChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true));
+            const vChannel = new LabelBuilder().setLabel("Select the bot's verification channel").setDescription('Select a channel where the verification messages can be sent in case the user has disabled DMs.').setChannelSelectMenuComponent(channelSelector.setCustomId('vChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true));
+            const lChannel = new LabelBuilder().setLabel("Select the bot's logging channel").setDescription('Select a channel where the bot can send actions log.').setChannelSelectMenuComponent(channelSelector.setCustomId('lChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true));
+            const wChannel = new LabelBuilder().setLabel("Select the bot's welcome channel").setDescription('Select a channel where the bot can send user welcome messages.').setChannelSelectMenuComponent(channelSelector.setCustomId('wChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true));
             promptModal.addLabelComponents(vChannel, lChannel, wChannel);
             break;
         }
