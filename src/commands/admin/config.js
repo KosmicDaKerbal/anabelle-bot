@@ -47,7 +47,7 @@ module.exports = {
             promptModal.setCustomId('channels').setTitle('Server Channels Configuration');
             promptModal.addLabelComponents(
                 label.setLabel("Select the bot's verification channel").setDescription('Select a channel where the verification messages can be sent in case the user has disabled DMs.').setChannelSelectMenuComponent(channelSelector.setCustomId('vChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true)),
-                label.setLabel("Select the bot's logging channel").setDescription('Select a channel where the bot can send actions log.').setChannelSelectMenuComponent(channelSelector.setCustomId('lChanne;').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true)),
+                label.setLabel("Select the bot's logging channel").setDescription('Select a channel where the bot can send actions log.').setChannelSelectMenuComponent(channelSelector.setCustomId('lChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true)),
                 label.setLabel("Select the bot's welcome channel").setDescription('Select a channel where the bot can send user welcome messages.').setChannelSelectMenuComponent(channelSelector.setCustomId('wChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true))
             );
             break;
