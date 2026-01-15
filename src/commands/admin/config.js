@@ -62,12 +62,32 @@ module.exports = {
             if (submission){
                 switch(submission.customId){
                     case 'roles':
-                        interaction.client.db.exec(`UPDATE localConfig SET verifiedRoleID = ${submission.fields.fields.get('vRole').values[0]}, unverifiedRoleID = ${submission.fields.fields.get('uvRole').values[0]}, botsRoleID = ${submission.fields.fields.get('bRole').values[0]} WHERE guildID = ${interaction.guild.id};`);
+                        interaction.client.db.exec(`
+                            UPDATE localConfig SET verifiedRoleID = ${submission.fields.fields.get('vRole').values[0]}, 
+                            unverifiedRoleID = ${submission.fields.fields.get('uvRole').values[0]}, 
+                            botsRoleID = ${submission.fields.fields.get('bRole').values[0]} 
+                            WHERE guildID = ${interaction.guild.id};
+                        `);
                         break;
                     case 'mod-team':
+                        interaction.client.db.exec(`
+                            UPDATE localConfig SET juniorMod1RoleID = ${submission.fields.fields.get('jmRole').values[0]}, 
+                            juniorMod2RoleID = ${submission.fields.fields.get('jmRole').values[1]}, 
+                            seniorMod1RoleID = ${submission.fields.fields.get('smRole').values[0]},
+                            seniorMod2RoleID = ${submission.fields.fields.get('smRole').values[1]},
+                            admin1RoleID = ${submission.fields.fields.get('adRole').values[0]},
+                            admin2RoleID = ${submission.fields.fields.get('adRole').values[1]},
+                            ownerUserID = ${submission.fields.fields.get('owner').values[0]}
+                            WHERE guildID = ${interaction.guild.id};
+                        `);
                         break;
                     case 'channels':
-                        interaction.client.db.exec(`UPDATE localConfig SET logChannelID = ${submission.fields.fields.get('lChannel').values[0]}, verificationChannelID = ${submission.fields.fields.get('vChannel').values[0]}, welcomeChannelID = ${submission.fields.fields.get('wChannel').values[0]} WHERE guildID = ${interaction.guild.id};`);
+                        interaction.client.db.exec(`
+                            UPDATE localConfig SET logChannelID = ${submission.fields.fields.get('lChannel').values[0]}, 
+                            verificationChannelID = ${submission.fields.fields.get('vChannel').values[0]}, 
+                            welcomeChannelID = ${submission.fields.fields.get('wChannel').values[0]} 
+                            WHERE guildID = ${interaction.guild.id};
+                        `);
                         break;
                 }
                 confirmEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: \`${submission.customId}\`\n`);
