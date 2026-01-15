@@ -23,7 +23,7 @@ module.exports = {
     if (!objectTypeCode && interaction.member.roles.cache.some(role => role.name === 'Verified')) captchaEmbed.setTitle("User already verified").setDescription("You have texting permissions on the server.").setColor(0x00ff00);
     else {
       try {
-        console.log(localData);
+        //console.log(localData);
       captchaCommand.present((!objectTypeCode) ? interaction.member : interaction);
       console.log(`[INFO] CAPTCHA process initiated for user ${interaction.user.username}, ID: ${interaction.user.id} in guild ${guild.name}, ID: ${guild.id}`)
     }

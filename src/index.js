@@ -22,20 +22,20 @@ client.db = require('better-sqlite3')(`${__dirname}/serverConfig.db`, dbOptions)
 client.db.pragma('journal_mode = WAL');
 client.db.exec (`
   CREATE TABLE IF NOT EXISTS localConfig (
-    guildID BIGINT PRIMARY KEY NOT NULL,
-    verifiedRoleID BIGINT DEFAULT NULL,
-    unverifiedRoleID BIGINT DEFAULT NULL,
-    botsRoleID BIGINT DEFAULT NULL,
-    verificationChannelID BIGINT DEFAULT NULL,
-    logChannelID BIGINT DEFAULT NULL,
-    welcomeChannelID BIGINT DEFAULT NULL,
-    juniorMod1RoleID BIGINT DEFAULT NULL,
-    juniorMod2RoleID BIGINT DEFAULT NULL,
-    seniorMod1RoleID BIGINT DEFAULT NULL,
-    seniorMod2RoleID BIGINT DEFAULT NULL,
-    admin1RoleID BIGINT DEFAULT NULL,
-    admin2RoleID BIGINT DEFAULT NULL,
-    ownerUserID BIGINT DEFAULT NULL
+    guildID VARCHAR(25) PRIMARY KEY NOT NULL,
+    verifiedRoleID VARCHAR(25) DEFAULT NULL,
+    unverifiedRoleID VARCHAR(25) DEFAULT NULL,
+    botsRoleID VARCHAR(25) DEFAULT NULL,
+    verificationChannelID VARCHAR(25) DEFAULT NULL,
+    logChannelID VARCHAR(25) DEFAULT NULL,
+    welcomeChannelID VARCHAR(25) DEFAULT NULL,
+    juniorMod1RoleID VARCHAR(25) DEFAULT NULL,
+    juniorMod2RoleID VARCHAR(25) DEFAULT NULL,
+    seniorMod1RoleID VARCHAR(25) DEFAULT NULL,
+    seniorMod2RoleID VARCHAR(25) DEFAULT NULL,
+    admin1RoleID VARCHAR(25) DEFAULT NULL,
+    admin2RoleID VARCHAR(25) DEFAULT NULL,
+    ownerUserID VARCHAR(25) DEFAULT NULL
   );
 `);
 client.commands = new Collection();
