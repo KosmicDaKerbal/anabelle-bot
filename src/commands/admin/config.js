@@ -20,60 +20,51 @@ module.exports = {
         time: 30_000,
     });
     configCollector.on("collect", async(Form) => {
+        const promptModal = new ModalBuilder();
+        const roleSelector = new RoleSelectMenuBuilder();
+        const channelSelector = new ChannelSelectMenuBuilder();
+        const userSelector = new UserSelectMenuBuilder();
+        const label = new LabelBuilder();
         switch (Form.customId){
         case 'roles':
-            const configRolesModal = new ModalBuilder().setCustomId('roles').setTitle('Server Roles Configuration');
-            const verifiedRoleSelect = new RoleSelectMenuBuilder().setCustomId('vRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true);
-            const unverifiedRoleSelect = new RoleSelectMenuBuilder().setCustomId('uvRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true);
-            const botsRoleSelect = new RoleSelectMenuBuilder().setCustomId('bRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true);
-            const verifiedRole = new LabelBuilder().setLabel("Select the server's verified role").setDescription('This role will be given to new members who successfully solve a CAPTCHA.').setRoleSelectMenuComponent(verifiedRoleSelect);
-            const unverifiedRole = new LabelBuilder().setLabel("Select the server's unverified role").setDescription('This role will be given to new members have not yet solved a CAPTCHA').setRoleSelectMenuComponent(unverifiedRoleSelect);
-            const botsRole = new LabelBuilder().setLabel("Select the server's bots role").setDescription('This role will be given to newly added bots. No CAPTCHA will be asked to them.').setRoleSelectMenuComponent(botsRoleSelect);
-            configRolesModal.addLabelComponents(verifiedRole, unverifiedRole, botsRole);
-            await Form.showModal(configRolesModal);
+            promptModal.setCustomId('roles').setTitle('Server Roles Configuration');
+            promptModal.addLabelComponents(
+                label.setLabel("Select the server's verified role").setDescription('This role will be given to new members who successfully solve a CAPTCHA.').setRoleSelectMenuComponent(roleSelector.setCustomId('vRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true)),
+                label.setLabel("Select the server's unverified role").setDescription('This role will be given to new members have not yet solved a CAPTCHA').setRoleSelectMenuComponent(roleSelector.setCustomId('uvRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true)),
+                label.setLabel("Select the server's bots role").setDescription('This role will be given to newly added bots. No CAPTCHA will be asked to them.').setRoleSelectMenuComponent(roleSelector.setCustomId('bRole').setPlaceholder('Select a role').setMaxValues(1).setRequired(true))
+            );
             break;
         case 'mod-team':
-            const configModsModal = new ModalBuilder().setCustomId('mod-team').setTitle('Server Mod Team Configuration');
-            const juniorModRoleSelect = new RoleSelectMenuBuilder().setCustomId('jmRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false);
-            const seniorModRoleSelect = new RoleSelectMenuBuilder().setCustomId('smRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false);
-            const adminRoleSelect = new RoleSelectMenuBuilder().setCustomId('adRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false);
-            const ownerSelect = new UserSelectMenuBuilder().setCustomId('owner').setPlaceholder('Select user').setMaxValues(1).setRequired(false);
-            const juniorModRole = new LabelBuilder().setLabel("Select the server's junior mod role(s)").setDescription('Select up to 2 roles for temporary admins, trial mods etc.').setRoleSelectMenuComponent(juniorModRoleSelect);
-            const seniorModRole = new LabelBuilder().setLabel("Select the server's senior mod role(s)").setDescription('Select up to 2 roles for permanent moderators').setRoleSelectMenuComponent(seniorModRoleSelect);
-            const adminRole = new LabelBuilder().setLabel("Select the server's administrator role(s)").setDescription('Select up to 2 roles for administrators of the server').setRoleSelectMenuComponent(adminRoleSelect);
-            const owner = new LabelBuilder().setLabel("Select the server's owner").setDescription("Select the server's owner").setUserSelectMenuComponent(ownerSelect);
-            configModsModal.addLabelComponents(juniorModRole, seniorModRole, adminRole, owner);
-            await Form.showModal(configModsModal);
+            promptModal.setCustomId('mod-team').setTitle('Server Mod Team Configuration');
+            promptModal.addLabelComponents(
+                label.setLabel("Select the server's junior mod role(s)").setDescription('Select up to 2 roles for temporary admins, trial mods etc.').setRoleSelectMenuComponent(roleSelector.setCustomId('jmRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false)),
+                label.setLabel("Select the server's senior mod role(s)").setDescription('Select up to 2 roles for permanent moderators').setRoleSelectMenuComponent(roleSelector.setCustomId('smRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false)),
+                label.setLabel("Select the server's administrator role(s)").setDescription('Select up to 2 roles for administrators of the server').setRoleSelectMenuComponent(roleSelector.setCustomId('adRole').setPlaceholder('Select a role').setMaxValues(2).setRequired(false)),
+                label.setLabel("Select the server's owner").setDescription("Select the server's owner").setUserSelectMenuComponent(userSelector.setCustomId('owner').setPlaceholder('Select user').setMaxValues(1).setRequired(false))
+            );
             break;
         case 'channels':
-            const configChannelsModal = new ModalBuilder().setCustomId('channels').setTitle('Server Channels Configuration');
-            const logChannelSelect = new ChannelSelectMenuBuilder().setCustomId('lChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true);
-            const verificationChannelSelect = new ChannelSelectMenuBuilder().setCustomId('vChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true);
-            const welcomeChannelSelect = new ChannelSelectMenuBuilder().setCustomId('wChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true);
-            const verificationChannel= new LabelBuilder().setLabel("Select the bot's verification channel").setDescription('Select a channel where the verification messages can be sent in case the user has disabled DMs.').setChannelSelectMenuComponent(verificationChannelSelect);
-            const logChannel = new LabelBuilder().setLabel("Select the bot's logging channel").setDescription('Select a channel where the bot can send actions log.').setChannelSelectMenuComponent(logChannelSelect);
-            const welcomeChannel = new LabelBuilder().setLabel("Select the bot's welcome channel").setDescription('Select a channel where the bot can send user welcome messages.').setChannelSelectMenuComponent(welcomeChannelSelect);
-            configChannelsModal.addLabelComponents(verificationChannel, logChannel, welcomeChannel);
-            await Form.showModal(configChannelsModal);
+            promptModal.setCustomId('channels').setTitle('Server Channels Configuration');
+            promptModal.addLabelComponents(
+                label.setLabel("Select the bot's verification channel").setDescription('Select a channel where the verification messages can be sent in case the user has disabled DMs.').setChannelSelectMenuComponent(channelSelector.setCustomId('vChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true)),
+                label.setLabel("Select the bot's logging channel").setDescription('Select a channel where the bot can send actions log.').setChannelSelectMenuComponent(channelSelector.setCustomId('lChanne;').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true)),
+                label.setLabel("Select the bot's welcome channel").setDescription('Select a channel where the bot can send user welcome messages.').setChannelSelectMenuComponent(channelSelector.setCustomId('wChannel').setPlaceholder('Select a channel').setMaxValues(1).setRequired(true))
+            );
             break;
         }
+        await Form.showModal(promptModal);
         const confirmEmbed = new EmbedBuilder();
         try {
             const submission = await Form.awaitModalSubmit ({time: 120000});
             if (submission){
                 switch(submission.customId){
                     case 'roles':
-                        //const roleUpdates = `<@&${previousData.verifiedRoleID}> => <@&${submission.fields.fields.get('vRole').values[0]}>\n<@&${previousData.unverifiedRoleID}> => <@&${submission.fields.fields.get('uvRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('bRole').values[0]}>`;
                         interaction.client.db.exec(`UPDATE localConfig SET verifiedRoleID = ${submission.fields.fields.get('vRole').values[0]}, unverifiedRoleID = ${submission.fields.fields.get('uvRole').values[0]}, botsRoleID = ${submission.fields.fields.get('bRole').values[0]} WHERE guildID = ${interaction.guild.id};`);
                         break;
                     case 'mod-team':
-                        //const mtUpdates = `<@&${previousData.verifiedRoleID}> => <@&${submission.fields.fields.get('jmRole').values[0]}>\n<@&${previousData.unverifiedRoleID}> => <@&${submission.fields.fields.get('smRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('adRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('owner').values[0]}>`;
-                        //const selectedModRoles = [submission.fields.fields.get('jmRole').values[0], submission.fields.fields.get('smRole').values[0], submission.fields.fields.get('adRole').values[0], submission.fields.fields.get('owner').values[0]];
                         break;
                     case 'channels':
-                        //const channelUpdates = `<@&${previousData.logChannelID}> => <@&${submission.fields.fields.get('vRole').values[0]}>\n<@&${previousData.unverifiedRoleID}> => <@&${submission.fields.fields.get('uvRole').values[0]}>\n<@&${previousData.botsRoleID}> => <@&${submission.fields.fields.get('bRole').values[0]}>`;
                         interaction.client.db.exec(`UPDATE localConfig SET logChannelID = ${submission.fields.fields.get('lChannel').values[0]}, verificationChannelID = ${submission.fields.fields.get('vChannel').values[0]}, welcomeChannelID = ${submission.fields.fields.get('wChannel').values[0]} WHERE guildID = ${interaction.guild.id};`);
-                        //const selectedChannels = [submission.fields.fields.get('lChannel').values[0], submission.fields.fields.get('vChannel').values[0], submission.fields.fields.get('wChannel').values[0]];
                         break;
                 }
                 confirmEmbed.setTitle("Server Configuration Updated").setDescription(`Config Type: \`${submission.customId}\`\n`);
