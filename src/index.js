@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, Collection, GatewayIntentBits, IntentsBitField, EmbedBuilder, ActivityType, Events, MessageFlags } = require("discord.js");
+const { Client, Collection, GatewayIntentBits, IntentsBitField, EmbedBuilder, ActivityType, Events, MessageFlags, PermissionsBitField } = require("discord.js");
 const fs = require("fs");
 const path = require ("path");
 const dbOptions = {
@@ -20,6 +20,7 @@ const client = new Client({
   });
 client.db = require('better-sqlite3')(`${__dirname}/serverConfig.db`, dbOptions);
 client.db.pragma('journal_mode = WAL');
+if (process.env.REGENERATE_DB === '1'){
 client.db.exec (`
   CREATE TABLE IF NOT EXISTS localConfig (
     guildID VARCHAR(25) PRIMARY KEY NOT NULL,
@@ -38,6 +39,7 @@ client.db.exec (`
     ownerUserID VARCHAR(25) DEFAULT NULL
   );
 `);
+}
 client.commands = new Collection();
 const commandFolders = fs.readdirSync(path.join(__dirname, 'commands'));
 for (const folder of commandFolders) {
@@ -52,8 +54,13 @@ for (const folder of commandFolders) {
  } else console.log(`[INFO] The command directory ${folder} is empty, skipping.`);
 }
 client.on(Events.GuildMemberAdd, async member => {
+  const roleData = client.db.prepare(`SELECT botsRoleID, unverifiedRoleID, logChannelID, seniorMod1RoleID, seniorMod2RoleID, admin1RoleID, admin2RoleID, ownerUserID FROM localConfig WHERE guildID = ?;`).get(member.guild.id);
+  if (!roleData.botsRoleID || !roleData.unverifiedRoleID){
+    const membersWithPermission = guild.members.cache.filter(member => member.permissions.has(PermissionsBitField.Flags.ManageGuild));
+    console.log (membersWithPermission);
+  }
   if(member.user.bot) {
-        member.roles.add(await member.guild.roles.fetch(process.env.BOT_ROLE_ID));
+        member.roles.add(await member.guild.roles.fetch(roleData.botsRoleID));
         return;
     };
     if(!member.roles.cache.some(role => role.name === 'UNVERIFIED')) member.roles.add(member.guild.roles.cache.find(role => role.name === 'UNVERIFIED'));
