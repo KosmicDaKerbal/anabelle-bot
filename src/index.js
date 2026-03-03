@@ -55,9 +55,10 @@ for (const folder of commandFolders) {
 }
 client.on(Events.GuildMemberAdd, async member => {
   const roleData = client.db.prepare(`SELECT botsRoleID, unverifiedRoleID, logChannelID, seniorMod1RoleID, seniorMod2RoleID, admin1RoleID, admin2RoleID, ownerUserID FROM localConfig WHERE guildID = ?;`).get(member.guild.id);
-  if (!roleData.botsRoleID || !roleData.unverifiedRoleID){
-    const membersWithPermission = guild.members.cache.filter(member => member.permissions.has(PermissionsBitField.Flags.ManageGuild));
+  const membersWithPermission = guild.members.cache.filter(member => member.permissions.has(PermissionsBitField.Flags.ManageGuild));
     console.log (membersWithPermission);
+  if (!roleData.botsRoleID || !roleData.unverifiedRoleID){
+    
   }
   if(member.user.bot) {
         member.roles.add(await member.guild.roles.fetch(roleData.botsRoleID));
