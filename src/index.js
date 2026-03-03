@@ -56,7 +56,7 @@ for (const folder of commandFolders) {
 }
 client.on(Events.GuildMemberAdd, async member => {
   const roleData = client.db.prepare(`SELECT botsRoleID, unverifiedRoleID FROM localConfig WHERE guildID = ?;`).get(member.guild.id);
-  if (typeof roleData.botsRoleID === "undefined" || typeof roleData.unverifiedRoleID === "undefined"){
+  if (!roleData.botsRoleID || !roleData.unverifiedRoleID){
     index.setTitle("Server Configuration Incomplete!").setDescription(`You haven't configured the critcal roles for the bot!\nPlease use **/config roles** to set the role assigned to bots and for unverified users.\nCaptcha for new join: <@${member.user.id}> (Username: ${member.user.username}) was not sent.`).setColor(0xff0000).setFooter({ text: member.guild.name, iconURL: member.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
     const membersWithPermission = Array.from((await member.guild.members.fetch()).filter((m => (m.permissions.has(PermissionsBitField.Flags.ManageGuild) && !m.user.bot))).keys());
     for (const user in membersWithPermission){
