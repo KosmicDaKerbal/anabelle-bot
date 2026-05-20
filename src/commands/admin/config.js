@@ -93,7 +93,7 @@ module.exports = {
                                 break;
                             case 'channels':
                                 interaction.client.db.exec(`
-                            UPDATE localConfig SET logChannelID = ${submission.fields.fields.get('lChannel').values[0]}, 
+                            UPDATE localConfig SET logChannelID = ${checkEmpty(submission.fields.fields.get('lChannel').values[0], 4)}, 
                             verificationChannelID = ${submission.fields.fields.get('vChannel').values[0]}, 
                             welcomeChannelID = ${submission.fields.fields.get('wChannel').values[0]} 
                             WHERE guildID = ${interaction.guild.id};
