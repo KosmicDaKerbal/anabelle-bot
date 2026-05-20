@@ -110,7 +110,7 @@ module.exports = {
                     configEmbed.addFields(
                         {
                             name: "**Roles**",
-                            value: '---------------------------------------',
+                            value: '',
                             inline: false,
                         },
                         {
@@ -129,10 +129,16 @@ module.exports = {
                             inline: true,
                         },
                         {
-                            name: "\n**Channels**",
-                            value: '---------------------------------------',
+                            name: "---------------------------------------",
+                            value: '',
                             inline: false,
                         },
+                        {
+                            name: "\n**Channels**",
+                            value: '',
+                            inline: false,
+                        },
+                        
                         {
                             name: "Logging",
                             value: `<#${previousData.logChannelID}>`,
@@ -149,8 +155,13 @@ module.exports = {
                             inline: true,
                         },
                         {
+                            name: "---------------------------------------",
+                            value: '',
+                            inline: false,
+                        },
+                        {
                             name: "\n**Mod Team Roles**",
-                            value: '---------------------------------------',
+                            value: '',
                             inline: false,
                         },
                         {
