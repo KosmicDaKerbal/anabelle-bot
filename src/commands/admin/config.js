@@ -109,8 +109,8 @@ module.exports = {
                 case 'show':
                     configEmbed.addFields(
                         {
-                            name: "Roles",
-                            value: '',
+                            name: "**Roles**",
+                            value: '---------------------------------------',
                             inline: false,
                         },
                         {
@@ -129,8 +129,8 @@ module.exports = {
                             inline: true,
                         },
                         {
-                            name: "Channels",
-                            value: '',
+                            name: "\n**Channels**",
+                            value: '---------------------------------------',
                             inline: false,
                         },
                         {
@@ -149,8 +149,8 @@ module.exports = {
                             inline: true,
                         },
                         {
-                            name: "Mod Team Roles",
-                            value: '',
+                            name: "\n**Mod Team Roles**",
+                            value: '---------------------------------------',
                             inline: false,
                         },
                         {
@@ -173,7 +173,7 @@ module.exports = {
                             value: `<@${previousData.ownerUserID}>`,
                             inline: true,
                         },
-                    );
+                    ).setColor(0x8c3f7a).setTimestamp;
                     break;
             }
             await interaction.reply({ embeds: [configEmbed] });
