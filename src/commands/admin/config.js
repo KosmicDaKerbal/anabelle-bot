@@ -2,11 +2,11 @@ const { LabelBuilder, EmbedBuilder, SlashCommandBuilder, MessageFlags, ModalBuil
 const process = require("process");
 function checkEmpty (inputKey, type) {
     switch (type) {
-        case 0: return (inputKey === null) ? `Not Configured` : `<@&${inputKey}`;
+        case 0: return (inputKey === null) ? `Not Configured` : `<@&${inputKey}>`;
         case 1: return (inputKey === null) ? `Not Configured` : `<#${inputKey}>`;
         case 2: return (inputKey === null) ? '' : `, <@&${inputKey}>`;
         case 3: return (inputKey === null) ? `Not Configured` : `<@${inputKey}>`;
-        case 4: return (inputKey === null) ? '' : inputKey;
+        case 4: return (inputKey === null) ? 'null' : inputKey;
     }
 }
 module.exports = {
@@ -190,7 +190,7 @@ module.exports = {
                         },
                         {
                             name: "Server Owner",
-                            value: checkEmpty(previousData.logChannelID, 3),
+                            value: checkEmpty(previousData.ownerUserID, 3),
                             inline: true,
                         },
                     ).setColor(0x8c3f7a).setTimestamp;
