@@ -1,5 +1,13 @@
 const { LabelBuilder, EmbedBuilder, SlashCommandBuilder, MessageFlags, ModalBuilder, RoleSelectMenuBuilder, ChannelSelectMenuBuilder, UserSelectMenuBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, PermissionsBitField } = require("discord.js");
 const process = require("process");
+function checkEmpty (inputKey, type) {
+    switch (type) {
+        case 0: return (inputKey === null) ? `Not Configured` : `<@&${inputKey}`;
+        case 1: return (inputKey === null) ? `Not Configured` : `<#${inputKey}>`;
+        case 2: return (inputKey === null) ? `` : `, <@&${inputKey}>`;
+        case 3: return (inputKey === null) ? `Not Configured` : `<@${inputKey}>`;
+    }
+}
 module.exports = {
     data: new SlashCommandBuilder().setName('config').setDescription("**Admin Command**: Open Configuration Menu")
         .addSubcommand((subcommand) => subcommand.setName('roles').setDescription('**Admin Command**: Defines all important roles for the bot to work properly.'))
@@ -141,7 +149,7 @@ module.exports = {
                         
                         {
                             name: "Logging",
-                            value: `<#${previousData.logChannelID}>`,
+                            value: checkEmpty(previousData.logChannelID, 1),
                             inline: true,
                         },
                         {
@@ -166,22 +174,22 @@ module.exports = {
                         },
                         {
                             name: "Junior Moderator",
-                            value: `<@&${previousData.juniorMod1RoleID}>, <@&${previousData.juniorMod2RoleID}>`,
+                            value: `<${checkEmpty(previousData.juniorMod1RoleID, 0)}${checkEmpty(previousData.juniorMod2RoleID, 2)}`,
                             inline: true,
                         },
                         {
                             name: "Senior Moderator",
-                            value: `<@&${previousData.seniorMod1RoleID}>, <@&${previousData.seniorMod2RoleID}>`,
+                            value: `<${checkEmpty(previousData.seniorMod1RoleID, 0)}${checkEmpty(previousData.seniorMod2RoleID, 2)}`,
                             inline: true,
                         },
                         {
                             name: "Administrator",
-                            value: `<@&${previousData.admin1RoleID}>, <@&${previousData.admin2RoleID}>`,
+                            value: `<${checkEmpty(previousData.admin1RoleID, 0)}${checkEmpty(previousData.admin2RoleID, 2)}`,
                             inline: true,
                         },
                         {
                             name: "Server Owner",
-                            value: `<@${previousData.ownerUserID}>`,
+                            value: checkEmpty(previousData.logChannelID, 3),
                             inline: true,
                         },
                     ).setColor(0x8c3f7a).setTimestamp;
