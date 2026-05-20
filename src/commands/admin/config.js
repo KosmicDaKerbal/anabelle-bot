@@ -6,7 +6,7 @@ function checkEmpty (inputKey, type) {
         case 1: return (inputKey === null) ? `Not Configured` : `<#${inputKey}>`;
         case 2: return (inputKey === null) ? '' : `, <@&${inputKey}>`;
         case 3: return (inputKey === null) ? `Not Configured` : `<@${inputKey}>`;
-        case 4: return (inputKey === null) ? 'null' : inputKey;
+        case 4: return (inputKey === undefined) ? 'null' : inputKey;
     }
 }
 module.exports = {
