@@ -80,8 +80,7 @@ module.exports = {
                         `);
                                 break;
                             case 'mod-team':
-                                //interaction.client.db.exec
-                                console.log(`
+                                interaction.client.db.exec(`
                             UPDATE localConfig SET juniorMod1RoleID = ${checkEmpty(submission.fields.fields.get('jmRole').values[0], 4)}, 
                             juniorMod2RoleID = ${checkEmpty(submission.fields.fields.get('jmRole').values[1], 4)}, 
                             seniorMod1RoleID = ${checkEmpty(submission.fields.fields.get('smRole').values[0], 4)},
