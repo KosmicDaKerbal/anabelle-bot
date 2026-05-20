@@ -176,7 +176,7 @@ module.exports = {
                     );
                     break;
             }
-            await interaction.editReply({ embeds: [configEmbed] });
+            await interaction.reply({ embeds: [configEmbed] });
         }
     }
 }
