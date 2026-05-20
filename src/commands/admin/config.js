@@ -4,8 +4,9 @@ function checkEmpty (inputKey, type) {
     switch (type) {
         case 0: return (inputKey === null) ? `Not Configured` : `<@&${inputKey}`;
         case 1: return (inputKey === null) ? `Not Configured` : `<#${inputKey}>`;
-        case 2: return (inputKey === null) ? `` : `, <@&${inputKey}>`;
+        case 2: return (inputKey === null) ? '' : `, <@&${inputKey}>`;
         case 3: return (inputKey === null) ? `Not Configured` : `<@${inputKey}>`;
+        case 4: return (inputKey === null) ? '' : inputKey;
     }
 }
 module.exports = {
@@ -80,13 +81,13 @@ module.exports = {
                                 break;
                             case 'mod-team':
                                 interaction.client.db.exec(`
-                            UPDATE localConfig SET juniorMod1RoleID = ${submission.fields.fields.get('jmRole').values[0]}, 
-                            juniorMod2RoleID = ${submission.fields.fields.get('jmRole').values[1]}, 
-                            seniorMod1RoleID = ${submission.fields.fields.get('smRole').values[0]},
-                            seniorMod2RoleID = ${submission.fields.fields.get('smRole').values[1]},
-                            admin1RoleID = ${submission.fields.fields.get('adRole').values[0]},
-                            admin2RoleID = ${submission.fields.fields.get('adRole').values[1]},
-                            ownerUserID = ${submission.fields.fields.get('owner').values[0]}
+                            UPDATE localConfig SET juniorMod1RoleID = ${checkEmpty(submission.fields.fields.get('jmRole').values[0], 4)}, 
+                            juniorMod2RoleID = ${checkEmpty(submission.fields.fields.get('jmRole').values[1], 4)}, 
+                            seniorMod1RoleID = ${checkEmpty(submission.fields.fields.get('smRole').values[0], 4)},
+                            seniorMod2RoleID = ${checkEmpty(submission.fields.fields.get('smRole').values[1], 4)},
+                            admin1RoleID = ${checkEmpty(submission.fields.fields.get('adRole').values[0], 4)},
+                            admin2RoleID = ${checkEmpty(submission.fields.fields.get('adRole').values[1], 4)},
+                            ownerUserID = ${checkEmpty(submission.fields.fields.get('owner').values[0], 4)}
                             WHERE guildID = ${interaction.guild.id};
                         `);
                                 break;
@@ -174,17 +175,17 @@ module.exports = {
                         },
                         {
                             name: "Junior Moderator",
-                            value: `<${checkEmpty(previousData.juniorMod1RoleID, 0)}${checkEmpty(previousData.juniorMod2RoleID, 2)}`,
+                            value: `${checkEmpty(previousData.juniorMod1RoleID, 0)}${checkEmpty(previousData.juniorMod2RoleID, 2)}`,
                             inline: true,
                         },
                         {
                             name: "Senior Moderator",
-                            value: `<${checkEmpty(previousData.seniorMod1RoleID, 0)}${checkEmpty(previousData.seniorMod2RoleID, 2)}`,
+                            value: `${checkEmpty(previousData.seniorMod1RoleID, 0)}${checkEmpty(previousData.seniorMod2RoleID, 2)}`,
                             inline: true,
                         },
                         {
                             name: "Administrator",
-                            value: `<${checkEmpty(previousData.admin1RoleID, 0)}${checkEmpty(previousData.admin2RoleID, 2)}`,
+                            value: `${checkEmpty(previousData.admin1RoleID, 0)}${checkEmpty(previousData.admin2RoleID, 2)}`,
                             inline: true,
                         },
                         {
