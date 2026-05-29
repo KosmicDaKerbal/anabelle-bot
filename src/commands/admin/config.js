@@ -35,18 +35,18 @@ module.exports = {
                     openSettingsForm.setDisabled(true);
                     interaction.client.db.exec(`
                         UPDATE localConfig SET 
-                        verifiedRoleID = null
-                        unverifiedRoleID = null
-                        botsRoleID = null
-                        juniorMod1RoleID = null
-                        juniorMod2RoleID = null
-                        seniorMod1RoleID = null
-                        seniorMod2RoleID = null
-                        adminRole1ID = null
-                        adminRole2ID = null
-                        ownerUserID = null
-                        logChannelID = null
-                        welcomeChannelID = null
+                        verifiedRoleID = null,
+                        unverifiedRoleID = null,
+                        botsRoleID = null,
+                        juniorMod1RoleID = null,
+                        juniorMod2RoleID = null,
+                        seniorMod1RoleID = null,
+                        seniorMod2RoleID = null,
+                        adminRole1ID = null,
+                        adminRole2ID = null,
+                        ownerUserID = null,
+                        logChannelID = null,
+                        welcomeChannelID = null,
                         verificationChannelID = null
                         WHERE guildID = ${interaction.guild.id};
                         `);
