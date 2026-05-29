@@ -146,17 +146,17 @@ module.exports = {
                 },
                 {
                     name: "Verified",
-                    value: `<@&${previousData.verifiedRoleID}>`,
+                    value: checkEmpty(previousData.verifiedRoleID, 0),
                     inline: true,
                 },
                 {
                     name: "Unverified",
-                    value: `<@&${previousData.unverifiedRoleID}>`,
+                    value: checkEmpty(previousData.unverifiedRoleID, 0),
                     inline: true,
                 },
                 {
                     name: " Bots",
-                    value: `<@&${previousData.botsRoleID}>`,
+                    value: checkEmpty(previousData.botsRoleID, 0),
                     inline: true,
                 },
                 {
@@ -177,12 +177,12 @@ module.exports = {
                 },
                 {
                     name: "Captcha Verification",
-                    value: `<#${previousData.verificationChannelID}>`,
+                    value: checkEmpty(previousData.verificationChannelID, 1),
                     inline: true,
                 },
                 {
                     name: "Welcome Message",
-                    value: `<#${previousData.welcomeChannelID}>`,
+                    value: checkEmpty(previousData.welcomeChannelID, 1),
                     inline: true,
                 },
                 {
