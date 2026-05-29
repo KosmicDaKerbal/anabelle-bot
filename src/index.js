@@ -62,7 +62,8 @@ client.on(Events.GuildMemberAdd, async member => {
     for (const user of membersWithPermission){
         console.log (`[INFO] botsRoleID and unverifiedRoleID for server ${member.guild.name} not configured, warning sent to admin ID: ${user.slice(0, user.indexOf(","))}`);
         client.users.send(user.slice(0, user.indexOf(",")), { embeds: [index] }).catch((e)=>{
-        console.log(`[INFO] Admin does not allow DM's from bots, ID: ${user.slice(0, user.indexOf(","))}`);
+        //console.log(`[INFO] Admin does not allow DM's from bots, ID: ${user.slice(0, user.indexOf(","))}`);
+        console.log(e);
       });
     }
     return;
