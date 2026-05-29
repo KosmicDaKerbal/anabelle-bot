@@ -1,5 +1,4 @@
 const {EmbedBuilder, SlashCommandBuilder} = require("discord.js");
-const process = require("process");
 module.exports = {
   data: new SlashCommandBuilder().setName('help').setDescription("Complete commands list for the bot."),
   async execute (interaction) {
