@@ -80,6 +80,10 @@ client.on(Events.GuildCreate, guild => {
 });
 client.on(Events.InteractionCreate, async (mainInteraction) => {
 	if (!mainInteraction.isChatInputCommand()) return;
+  if (!mainInteraction.guild){
+    index.setTitle("Invalid Command").setDescription("Commands are not allowed in DMs.");
+    await mainInteraction.reply({ embeds: [index], flags: MessageFlags.Ephemeral });
+  };
   const localData = client.db.prepare("SELECT verifiedRoleID, unverifiedRoleID, botsRoleID, verificationChannelID, welcomeChannelID FROM localConfig WHERE guildID = ?").get(mainInteraction.guild.id);
   const nullKeys = [];
   for (const key in localData) if (localData[key] === null) nullKeys.push(key);
