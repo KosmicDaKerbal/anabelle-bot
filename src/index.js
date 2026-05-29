@@ -57,14 +57,12 @@ for (const folder of commandFolders) {
 client.on(Events.GuildMemberAdd, async member => {
   const roleData = client.db.prepare(`SELECT botsRoleID, unverifiedRoleID FROM localConfig WHERE guildID = ?;`).get(member.guild.id);
   if (!roleData.botsRoleID || !roleData.unverifiedRoleID){
-    index.setTitle("Server Configuration Incomplete!").setDescription(`You haven't configured the critcal roles for the bot!\nPlease use **/config roles** to set the role assigned to bots and for unverified users.\nCaptcha for new join: <@${member.user.id}> (Username: ${member.user.username}) was not sent.`).setColor(0xff0000).setFooter({ text: member.guild.name, iconURL: member.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+    index.setTitle("Server Configuration Incomplete!").setDescription(`You haven't configured the critcal roles for the bot!\nPlease use **/config roles** to set the role assigned to bots and for unverified users, and **/config channels** for the critical channels.\n\nCaptcha for new join: <@${member.user.id}> (Username: ${member.user.username}) was not sent.`).setColor(0xff0000).setFooter({ text: member.guild.name, iconURL: member.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
     const membersWithPermission = (await member.guild.members.fetch()).filter((m => (m.permissions.has(PermissionsBitField.Flags.ManageGuild) && !m.user.bot)));
     for (const user of membersWithPermission.values()){
-        const currentUser = user.id;
-        console.log (`[INFO] botsRoleID and unverifiedRoleID for server ${member.guild.name} not configured, warning sent to admin ID: ${currentUser}`);
-        await client.users.send(currentUser, { embeds: [index] }).catch((e)=>{
-        //console.log(`[INFO] Admin does not allow DM's from bots, ID: ${user.slice(0, user.indexOf(","))}`);
-        console.log(e);
+        console.log (`[INFO] botsRoleID and unverifiedRoleID for server ${member.guild.name} not configured, warning sent to admin ID: ${user.id}`);
+        await client.users.send(user.id, { embeds: [index] }).catch((e)=>{
+        console.log(`[INFO] Admin does not allow DM's from bots, ID: ${user.id}`);
       });
     }
     return;
