@@ -1,7 +1,7 @@
 const { EmbedBuilder, SlashCommandBuilder, MessageFlags, PermissionsBitField } = require("discord.js");
 const process = require("process");
 module.exports = {
-    slowmode: new SlashCommandBuilder().setName('slowmode').setDescription("Admin Command: Set a custom slowmode for a channel").addIntegerOption(option => option.setName('duration').setDescription("Set a duration in seconds").setMinValue(0).setMaxValue(21600).setRequired(true)),
+    data: new SlashCommandBuilder().setName('slowmode').setDescription("Admin Command: Set a custom slowmode for a channel").addIntegerOption(option => option.setName('duration').setDescription("Set a duration in seconds").setMinValue(0).setMaxValue(21600).setRequired(true)),
     async execute(interaction) {
         const slow = new EmbedBuilder();
         const previousData = interaction.client.db.prepare("SELECT juniorMod1RoleID, juniorMod2RoleID, seniorMod1RoleID, seniorMod2RoleID, admin1RoleID, admin2RoleID, ownerUserID, logChannelID FROM localConfig WHERE guildID = ?").get(interaction.guild.id);
