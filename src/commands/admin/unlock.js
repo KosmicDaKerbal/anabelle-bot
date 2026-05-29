@@ -1,7 +1,7 @@
 const { EmbedBuilder, SlashCommandBuilder, PermissionsBitField, MessageFlags } = require("discord.js");
 const process = require("process");
 module.exports = {
-    channel: new SlashCommandBuilder().setName('unlock').setDescription("Admin Command: Unlock a channel"),
+    data: new SlashCommandBuilder().setName('unlock').setDescription("Admin Command: Unlock a channel"),
     async execute(interaction) {
         const unlockchannel = new EmbedBuilder();
         const channelID = interaction.channelId;

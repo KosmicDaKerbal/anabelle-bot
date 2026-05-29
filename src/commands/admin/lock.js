@@ -1,7 +1,7 @@
 const { EmbedBuilder, SlashCommandBuilder, MessageFlags, PermissionsBitField } = require("discord.js");
 const process = require("process");
 module.exports = {
-    lock: new SlashCommandBuilder().setName('lock').setDescription("Admin Command: Lock a channel"),
+    data: new SlashCommandBuilder().setName('lock').setDescription("Admin Command: Lock a channel"),
     async execute(interaction) {
         const lockchannel = new EmbedBuilder();
         const channelID = interaction.channelId;
