@@ -31,7 +31,7 @@ module.exports = {
                 time: 30_000,
             });
             configCollector.on("collect", async (Form) => {
-                if (Form.customid === 'delete') {
+                if (Form.customId === 'delete') {
                     openSettingsForm.setDisabled(true);
                     interaction.client.db.exec(`
                         UPDATE localConfig SET 
