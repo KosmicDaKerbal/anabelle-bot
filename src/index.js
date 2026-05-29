@@ -50,7 +50,7 @@ for (const folder of commandFolders) {
 	for (const file of commandFiles) {
 		const command = require(path.join(commandsPath, file));
 		if ('data' in command && 'execute' in command) client.commands.set(path.basename(file, path.extname(file)), command);
-    else console.warn(`[WARNING] The command at ${filePath} is missing a required "execute" or "data" property.`);
+    else console.warn(`[WARNING] The command at ${path.join(commandsPath, file)} is missing a required "execute" or "data" property.`);
 	}
  } else console.log(`[INFO] The command directory ${folder} is empty, skipping.`);
 }
