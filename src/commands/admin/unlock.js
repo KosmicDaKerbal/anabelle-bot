@@ -1,4 +1,4 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, SlashCommandBuilder, PermissionsBitField, MessageFlags } = require("discord.js");
 const process = require("process");
 module.exports = {
     channel: new SlashCommandBuilder().setName('unlock').setDescription("Admin Command: Unlock a channel"),
