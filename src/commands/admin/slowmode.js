@@ -12,7 +12,7 @@ module.exports = {
             await interaction.reply({ embeds: [slow], flags: MessageFlags.Ephemeral });
         } else {
             interaction.channel.setRateLimitPerUser(interaction.options.get("duration").value);
-            slow.setTitle("Set slowmode to " + interaction.options.get("duration").value + " seconds.").setColor(0x8c3f7a).setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.PROCESSING }).setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
+            slow.setTitle("Set slowmode to " + interaction.options.get("duration").value + " seconds.").setColor(0x8c3f7a).setAuthor({ name: `${interaction.guild.name} Administration`, iconURL: process.env.SUCCESS }).setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL({ dynamic: true, size: 32 })}).setTimestamp();
             await interaction.reply({ embeds: [slow] });
         }
     }
