@@ -26,7 +26,7 @@ module.exports = {
         const checkPermissions = interaction.user.id === interaction.guild.ownerId || interaction.user.id === previousData.ownerUserID || interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild) || rolesList.some(roleid => interaction.member.roles.cache.has(roleid));
         if (!checkPermissions) {
             configEmbed.setTitle("Permission Denied").setDescription("You must either have your Role ID listed as a moderator or have the 'Manage Server' permission").setColor(0xff0000);
-            await interaction.reply({ embeds: [configEmbed] });
+            await interaction.reply({ embeds: [configEmbed], flags: MessageFlags.Ephemeral });
         } else {
             if (['roles', 'mod-team', 'channels', 'delete'].includes(cName)) {
                 const openSettingsForm = new ButtonBuilder().setCustomId(`${cName}`).setLabel((cName === 'delete') ? 'Confirm Delete' : 'Open Setup').setStyle((cName === 'delete') ? ButtonStyle.Danger : ButtonStyle.Primary).setDisabled(false);
